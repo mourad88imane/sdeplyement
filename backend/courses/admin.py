@@ -58,7 +58,7 @@ class CourseAdmin(admin.ModelAdmin):
             'fields': ('title_fr', 'title_ar', 'title_en', 'label', 'course_type', 'slug', 'category', 'status', 'featured')
         }),
         ('Descriptions', {
-            'fields': ('description_fr', 'description_ar', 'description_en', 'content_fr', 'content_ar')
+            'fields': ('description_fr', 'description_ar', 'description_en', 'content_fr', 'content_ar', 'content_en')
         }),
         ('Métadonnées du cours', {
             'fields': ('level', 'duration_weeks', 'duration_hours', 'max_students')
