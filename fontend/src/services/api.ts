@@ -2,7 +2,7 @@
 
 // ==================== PRODUCTION CONFIG FOR SERVER ====================
 export const API_BASE_URL = '/api';
-export const BACKEND_URL = 'http://10.10.10.10';
+export const BACKEND_URL = 'http://localhost:8000';
 
 console.log('🚀 PRODUCTION API CONFIG LOADED:', {
   API_BASE_URL,
