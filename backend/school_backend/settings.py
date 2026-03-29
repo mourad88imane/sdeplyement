@@ -5,9 +5,18 @@ Django settings for school_backend project.
 from pathlib import Path
 import os
 
+import environ
+
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-school-ent-development-key-2024')
 
@@ -82,14 +91,7 @@ WSGI_APPLICATION = 'school_backend.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'venddb',
-        'USER': 'venduser',
-        'PASSWORD': 'mouraD&88',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': env.db(),  # This will use DATABASE_URL from your .env
 }
 
 #pasword validation

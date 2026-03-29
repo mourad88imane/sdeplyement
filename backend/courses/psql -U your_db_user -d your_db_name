@@ -1,0 +1,1 @@
+psql -U your_db_user -d your_db_name

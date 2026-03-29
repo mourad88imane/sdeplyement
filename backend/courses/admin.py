@@ -55,10 +55,10 @@ class CourseAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Informations de base', {
-            'fields': ('title_fr', 'title_ar', 'label', 'course_type', 'slug', 'category', 'status', 'featured')
+            'fields': ('title_fr', 'title_ar', 'title_en', 'label', 'course_type', 'slug', 'category', 'status', 'featured')
         }),
         ('Descriptions', {
-            'fields': ('description_fr', 'description_ar', 'content_fr', 'content_ar')
+            'fields': ('description_fr', 'description_ar', 'description_en', 'content_fr', 'content_ar')
         }),
         ('Métadonnées du cours', {
             'fields': ('level', 'duration_weeks', 'duration_hours', 'max_students')
@@ -91,7 +91,8 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(CourseModule)
 class CourseModuleAdmin(admin.ModelAdmin):
-    list_display = ['title_fr', 'course', 'duration_hours', 'order', 'created_at']
+    list_display = ['title_fr', 'course', 'duration_hours', 'order', 'created_at'
+]
     list_filter = ['course', 'created_at']
     search_fields = ['title_fr', 'title_ar', 'course__title_fr']
     ordering = ['course', 'order']
