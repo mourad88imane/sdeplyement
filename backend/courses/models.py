@@ -53,6 +53,7 @@ class Course(models.Model):
     title_ar = models.CharField(max_length=200, verbose_name="Titre (Arabe)")
     title_en = models.CharField(max_length=200, blank=True, null=True, verbose_name="Title (English)")
     label = models.CharField(max_length=50, blank=True, verbose_name="Label (ex: Bootcamp, Introduction)")
+    content_en = models.TextField(blank=True, null=True, verbose_name="Detailed Content (English)")
     course_type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='school', verbose_name="Type de cours")
     slug = models.SlugField(max_length=250, unique=True)
 
