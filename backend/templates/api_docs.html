@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation API - ENT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .api-section { margin: 2rem 0; padding: 1.5rem; border: 1px solid #ddd; border-radius: 8px; }
+        .endpoint { background: #f8f9fa; padding: 1rem; border-radius: 5px; margin: 1rem 0; }
+        .method { padding: 0.25rem 0.5rem; border-radius: 3px; color: white; font-weight: bold; }
+        .get { background: #28a745; }
+        .post { background: #007bff; }
+        .put { background: #ffc107; color: black; }
+        .delete { background: #dc3545; }
+        pre { background: #f8f9fa; padding: 1rem; border-radius: 5px; overflow-x: auto; }
+        .test-btn { margin: 0.5rem 0; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>📚 Documentation API - ENT</h1>
+        <p class="lead">API REST pour l'École Nationale des Transmissions</p>
+        
+        <div class="alert alert-info">
+            <strong>Base URL:</strong> <code>http://192.168.100.16:8000</code><br>
+            <strong>CORS:</strong> Activé pour tous les domaines<br>
+            <strong>Format:</strong> JSON
+        </div>
+
+        <!-- API Événements -->
+        <div class="api-section">
+            <h2>🎯 API Événements</h2>
+            
+            <div class="endpoint">
+                <h4><span class="method get">GET</span> /events/api/events/</h4>
+                <p><strong>Description:</strong> Récupère tous les événements publiés</p>
+                
+                <h5>Paramètres de requête (optionnels):</h5>
+                <ul>
+                    <li><code>category</code> - Filtrer par catégorie</li>
+                    <li><code>featured</code> - Événements en vedette (true/false)</li>
+                    <li><code>upcoming</code> - Événements à venir (true/false)</li>
+                </ul>
+                
+                <h5>Exemple de réponse:</h5>
+                <pre><code>{
+  "success": true,
+  "count": 8,
+  "events": [
+    {
+      "id": 1,
+      "title_fr": "Conférence Internationale sur l'Intelligence Artificielle",
+      "title_ar": "المؤتمر الدولي حول الذكاء الاصطناعي",
+      "slug": "conference-ia-2025",
+      "description_fr": "Cette conférence internationale...",
+      "category": {
+        "id": 1,
+        "name_fr": "Conférences",
+        "name_ar": "المؤتمرات"
+      },
+      "start_date": "2025-07-16T19:03:07.560375Z",
+      "end_date": "2025-07-17T03:03:07.560375Z",
+      "location": "École Nationale des Transmissions",
+      "address": "Route de Sidi Bel Abbès, Oran, Algérie",
+      "room": "Amphithéâtre Principal",
+      "max_participants": 200,
+      "registration_required": true,
+      "registration_fee": 0.0,
+      "priority": "high",
+      "is_featured": true,
+      "is_upcoming": true,
+      "is_ongoing": false,
+      "is_past": false,
+      "organizer": {
+        "id": 1,
+        "name": "Admin ENT",
+        "email": "admin@ent.dz"
+      },
+      "views_count": 0,
+      "created_at": "2025-07-01T15:56:32.560375Z"
+    }
+  ]
+}</code></pre>
+                
+                <button class="btn btn-primary test-btn" onclick="testAPI('/events/api/events/')">
+                    🧪 Tester cette API
+                </button>
+            </div>
+            
+            <div class="endpoint">
+                <h4><span class="method get">GET</span> /events/api/conferences/</h4>
+                <p><strong>Description:</strong> Récupère spécifiquement les conférences</p>
+                
+                <h5>Exemple de réponse:</h5>
+                <pre><code>{
+  "success": true,
+  "count": 1,
+  "conferences": [
+    {
+      "id": 1,
+      "title": "Conférence Internationale sur l'Intelligence Artificielle",
+      "title_ar": "المؤتمر الدولي حول الذكاء الاصطناعي",
+      "slug": "conference-ia-2025",
+      "description": "Cette conférence internationale...",
+      "start_date": "2025-07-16T19:03:07.560375Z",
+      "end_date": "2025-07-17T03:03:07.560375Z",
+      "location": "École Nationale des Transmissions",
+      "address": "Route de Sidi Bel Abbès, Oran, Algérie",
+      "room": "Amphithéâtre Principal",
+      "max_participants": 200,
+      "registration_required": true,
+      "registration_fee": 0.0,
+      "priority": "high",
+      "is_featured": true,
+      "status": {
+        "is_upcoming": true,
+        "is_ongoing": false,
+        "is_past": false
+      },
+      "organizer": {
+        "name": "Admin ENT",
+        "email": "admin@ent.dz"
+      },
+      "category": "Conférences",
+      "views_count": 0,
+      "created_at": "2025-07-01T15:56:32.560375Z"
+    }
+  ],
+  "message": "1 conférence(s) trouvée(s)"
+}</code></pre>
+                
+                <button class="btn btn-primary test-btn" onclick="testAPI('/events/api/conferences/')">
+                    🧪 Tester cette API
+                </button>
+            </div>
+        </div>
+
+        <!-- API Authentification -->
+        <div class="api-section">
+            <h2>🔐 API Authentification</h2>
+            
+            <div class="endpoint">
+                <h4><span class="method post">POST</span> /api/auth/register/</h4>
+                <p><strong>Description:</strong> Inscription d'un nouvel utilisateur</p>
+                
+                <h5>Corps de la requête:</h5>
+                <pre><code>{
+  "username": "john_doe",
+  "email": "john@ent.dz",
+  "password": "password123",
+  "password_confirm": "password123",
+  "first_name": "John",
+  "last_name": "Doe",
+  "phone": "+213 555 000 000",
+  "address": "Alger, Algérie"
+}</code></pre>
+                
+                <button class="btn btn-primary test-btn" onclick="testAPI('/api/auth/register/')">
+                    🧪 Voir les infos de cette API
+                </button>
+            </div>
+            
+            <div class="endpoint">
+                <h4><span class="method post">POST</span> /api/auth/login/</h4>
+                <p><strong>Description:</strong> Connexion utilisateur</p>
+                
+                <button class="btn btn-primary test-btn" onclick="testAPI('/api/auth/login/')">
+                    🧪 Voir les infos de cette API
+                </button>
+            </div>
+            
+            <div class="endpoint">
+                <h4><span class="method get">GET</span> /api/test-cors/</h4>
+                <p><strong>Description:</strong> Test de connectivité CORS</p>
+                
+                <button class="btn btn-primary test-btn" onclick="testAPI('/api/test-cors/')">
+                    🧪 Tester CORS
+                </button>
+            </div>
+        </div>
+
+        <!-- Résultats des tests -->
+        <div id="test-results" class="mt-4"></div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://192.168.100.16:8000';
+        
+        async function testAPI(endpoint) {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<div class="alert alert-info">🔄 Test en cours...</div>';
+            
+            try {
+                const response = await fetch(BASE_URL + endpoint);
+                const data = await response.json();
+                
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h5>✅ Test réussi pour ${endpoint}</h5>
+                        <p><strong>Status:</strong> ${response.status}</p>
+                        <p><strong>Réponse:</strong></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5>❌ Erreur pour ${endpoint}</h5>
+                        <p><strong>Erreur:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Dashboard Principal - ENT Admin{% endblock %}
+{% block page_title %}Dashboard Principal{% endblock %}
+
+{% block content %}
+<!-- Actions Rapides -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <a href="{% url 'users_management' %}" class="text-decoration-none">
+            <div class="stat-card text-center h-100">
+                <div class="stat-icon text-primary">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h6>Gérer les Utilisateurs</h6>
+                <p class="text-muted mb-0">{{ stats.users.total }} utilisateurs</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="/dashboard/courses/" class="text-decoration-none">
+            <div class="stat-card text-center h-100">
+                <div class="stat-icon text-success">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h6>Gérer les Cours</h6>
+                <p class="text-muted mb-0">{{ stats.courses.total }} cours</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="/dashboard/library/" class="text-decoration-none">
+            <div class="stat-card text-center h-100">
+                <div class="stat-icon text-info">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h6>Gérer la Bibliothèque</h6>
+                <p class="text-muted mb-0">{{ stats.library.total_books }} livres</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'advanced_statistics' %}" class="text-decoration-none">
+            <div class="stat-card text-center h-100">
+                <div class="stat-icon text-warning">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h6>Statistiques Avancées</h6>
+                <p class="text-muted mb-0">Analyses détaillées</p>
+            </div>
+        </a>
+    </div>
+</div>
+<!-- Statistiques Principales -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-primary">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number text-primary">{{ stats.users.total }}</div>
+            <div class="stat-label">Utilisateurs</div>
+            <small class="text-success">+{{ stats.users.new_this_week }} cette semaine</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-success">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="stat-number text-success">{{ stats.courses.total }}</div>
+            <div class="stat-label">Cours</div>
+            <small class="text-info">{{ stats.courses.published }} publiés</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-info">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-number text-info">{{ stats.library.total_books }}</div>
+            <div class="stat-label">Livres</div>
+            <small class="text-warning">{{ stats.library.borrowed_books }} empruntés</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-warning">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="stat-number text-warning">{{ stats.notifications.unread_notifications }}</div>
+            <div class="stat-label">Notifications</div>
+            <small class="text-danger">{{ stats.notifications.important_notifications }} importantes</small>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Messages Urgents -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="fas fa-exclamation-triangle text-danger me-2"></i>Messages Urgents</h5>
+                <span class="badge bg-danger">{{ urgent_messages|length }}</span>
+            </div>
+
+            {% if urgent_messages %}
+            {% for message in urgent_messages %}
+            <div class="alert alert-warning d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ message.user.get_full_name }}</strong>
+                    <p class="mb-1">{{ message.subject }}</p>
+                    <small class="text-muted">{{ message.created_at|date:"d/m/Y H:i" }}</small>
+                </div>
+                <a href="/admin/users/adminusermessage/{{ message.id }}/change/" class="btn btn-sm btn-outline-primary">
+                    Répondre
+                </a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="text-center py-3">
+                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                <p class="text-muted mb-0">Aucun message urgent</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Activités Récentes -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-clock me-2"></i>Activités Récentes</h5>
+
+            <div class="list-group list-group-flush">
+                {% for user in recent_users %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-user-plus text-success me-2"></i>
+                        <strong>{{ user.get_full_name|default:user.username }}</strong> s'est inscrit
+                    </div>
+                    <small class="text-muted">{{ user.date_joined|timesince }}</small>
+                </div>
+                {% endfor %}
+
+                {% for course in recent_courses %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-book-open text-primary me-2"></i>
+                        Nouveau cours: <strong>{{ course.title_fr }}</strong>
+                    </div>
+                    <small class="text-muted">{{ course.created_at|timesince }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Cours Populaires -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-star me-2"></i>Cours Populaires</h5>
+
+            {% if popular_courses %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Cours</th>
+                            <th>Inscriptions</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in popular_courses %}
+                        <tr>
+                            <td>{{ course.title_fr|truncatechars:30 }}</td>
+                            <td>
+                                <span class="badge bg-primary">{{ course.enrollment_count }}</span>
+                            </td>
+                            <td>
+                                <a href="{% url 'course_detail' course.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-3">
+                <i class="fas fa-book-open fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">Aucun cours disponible</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Actions Rapides -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-bolt me-2"></i>Actions Rapides</h5>
+
+            <div class="d-grid gap-2">
+                <a href="/admin/auth/user/add/" class="btn btn-outline-primary">
+                    <i class="fas fa-user-plus me-2"></i>Ajouter un utilisateur
+                </a>
+                <a href="/admin/users/teammember/" class="btn btn-outline-primary">
+                    <i class="fas fa-users-cog me-2"></i>Gérer l'équipe
+                </a>
+
+
+
+                <a href="/admin/courses/course/add/" class="btn btn-outline-success">
+                    <i class="fas fa-plus me-2"></i>Créer un cours
+                </a>
+                <a href="/admin/library/book/add/" class="btn btn-outline-info">
+                    <i class="fas fa-book me-2"></i>Ajouter un livre
+                </a>
+                <a href="/admin/news/news/add/" class="btn btn-outline-warning">
+                    <i class="fas fa-newspaper me-2"></i>Publier une actualité
+                </a>
+                <a href="/admin/" class="btn btn-outline-secondary">
+                    <i class="fas fa-cog me-2"></i>Administration complète
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

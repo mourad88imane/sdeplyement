@@ -1,0 +1,52 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block admin_change_form_document_ready %}
+  {{ block.super }}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        const errorLists = Array.from(document.querySelectorAll('.errorlist'));
+        if (!errorLists.length) return;
+
+        // Highlight all error lists so they stand out
+        for (const el of errorLists) {
+          el.style.background = '#fff2f2';
+          el.style.borderLeft = '4px solid #e53935';
+          el.style.padding = '8px 12px';
+          el.style.marginTop = '6px';
+        }
+
+        // Expand any collapsed fieldsets that contain errors
+        for (const el of errorLists) {
+          const fs = el.closest('fieldset');
+          if (fs && fs.classList.contains('collapse')) {
+            fs.classList.remove('collapse');
+            // Also remove the "collapsed" header state if present
+            const legend = fs.querySelector('h2');
+            if (legend) legend.classList.remove('collapsed');
+          }
+
+          // Expand inline groups if errors are inside them
+          const inline = el.closest('.inline-group, .inline-related');
+          if (inline) {
+            inline.classList.remove('collapsed');
+            // For tabular inline, try to ensure it's visible
+            inline.style.display = '';
+          }
+        }
+
+        // Focus the first input related to first error and scroll into view
+        const firstError = errorLists[0];
+        const firstInput = firstError.closest('.form-row')?.querySelector('input, textarea, select') || firstError.querySelector('input, textarea, select');
+        if (firstInput) {
+          firstInput.focus();
+        }
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (e) {
+        // Fail silently – we don't want to break admin if JS throws
+        console.error('Admin error helper failed', e);
+      }
+    });
+  </script>
+{% endblock %}

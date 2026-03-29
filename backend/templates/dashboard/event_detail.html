@@ -1,0 +1,332 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ event.title_fr }} - Détails Événement{% endblock %}
+{% block page_title %}Détails de l'Événement{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Informations Principales -->
+    <div class="col-md-8">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5><i class="fas fa-calendar me-2"></i>{{ event.title_fr }}</h5>
+                <div>
+                    <a href="/events/management/" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                    <a href="/admin/events/event/{{ event.id }}/change/" class="btn btn-primary">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.title_fr }}" class="img-fluid rounded">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px;">
+                            <i class="fas fa-calendar fa-3x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h6>Informations Générales</h6>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>Catégorie:</strong></td>
+                            <td>
+                                <span class="badge" style="background-color: {{ event.category.color }};">
+                                    {{ event.category.name_fr }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Statut:</strong></td>
+                            <td>
+                                <span class="badge bg-{% if event.status == 'published' %}success{% elif event.status == 'draft' %}warning{% elif event.status == 'cancelled' %}danger{% else %}secondary{% endif %}">
+                                    {{ event.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Priorité:</strong></td>
+                            <td>
+                                <span class="badge bg-{% if event.priority == 'urgent' %}danger{% elif event.priority == 'high' %}warning{% elif event.priority == 'normal' %}info{% else %}secondary{% endif %}">
+                                    {{ event.get_priority_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date de début:</strong></td>
+                            <td>{{ event.start_date|date:"d/m/Y à H:i" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date de fin:</strong></td>
+                            <td>{{ event.end_date|date:"d/m/Y à H:i" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lieu:</strong></td>
+                            <td>
+                                {{ event.location }}
+                                {% if event.room %}<br><small class="text-muted">{{ event.room }}</small>{% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h6>Description</h6>
+                <p>{{ event.description_fr|linebreaks }}</p>
+            </div>
+            
+            {% if event.attachment %}
+            <div class="mb-4">
+                <h6>Pièce jointe</h6>
+                <a href="{{ event.attachment.url }}" class="btn btn-outline-info btn-sm" target="_blank">
+                    <i class="fas fa-download me-2"></i>Télécharger
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Liste des Inscriptions -->
+        <div class="content-card">
+            <h5><i class="fas fa-users me-2"></i>Inscriptions ({{ stats.total_registrations }})</h5>
+            
+            {% if registrations %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Utilisateur</th>
+                                <th>Email</th>
+                                <th>Statut</th>
+                                <th>Paiement</th>
+                                <th>Date d'inscription</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for registration in registrations %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px;">
+                                            {{ registration.user.first_name|first|default:registration.user.username|first|upper }}
+                                        </div>
+                                        <div>
+                                            <strong>{{ registration.user.get_full_name|default:registration.user.username }}</strong>
+                                            <br>
+                                            <small class="text-muted">@{{ registration.user.username }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ registration.user.email }}</td>
+                                <td>
+                                    <span class="badge bg-{% if registration.status == 'confirmed' %}success{% elif registration.status == 'pending' %}warning{% elif registration.status == 'cancelled' %}danger{% elif registration.status == 'attended' %}info{% else %}secondary{% endif %}">
+                                        {{ registration.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{% if registration.payment_status == 'paid' %}success{% elif registration.payment_status == 'pending' %}warning{% else %}secondary{% endif %}">
+                                        {{ registration.get_payment_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ registration.registered_at|date:"d/m/Y H:i" }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-success" onclick="updateStatus({{ registration.id }}, 'confirmed')" title="Confirmer">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" onclick="updateStatus({{ registration.id }}, 'cancelled')" title="Annuler">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                {% if registrations.has_other_pages %}
+                <nav aria-label="Pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if registrations.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ registrations.previous_page_number }}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in registrations.paginator.page_range %}
+                            {% if registrations.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > registrations.number|add:'-3' and num < registrations.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if registrations.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ registrations.next_page_number }}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Aucune inscription pour cet événement.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Sidebar avec Statistiques -->
+    <div class="col-md-4">
+        <!-- Statistiques -->
+        <div class="content-card">
+            <h6><i class="fas fa-chart-bar me-2"></i>Statistiques</h6>
+            <div class="row text-center">
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-primary">{{ stats.total_registrations }}</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-success">{{ stats.confirmed_registrations }}</div>
+                    <div class="stat-label">Confirmées</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-warning">{{ stats.pending_registrations }}</div>
+                    <div class="stat-label">En attente</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-danger">{{ stats.cancelled_registrations }}</div>
+                    <div class="stat-label">Annulées</div>
+                </div>
+            </div>
+            
+            {% if event.max_participants %}
+            <div class="mt-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Capacité</span>
+                    <span>{{ stats.confirmed_registrations }}/{{ event.max_participants }}</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" style="width: {% widthratio stats.confirmed_registrations event.max_participants 100 %}%"></div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Informations Organisateur -->
+        <div class="content-card">
+            <h6><i class="fas fa-user me-2"></i>Organisateur</h6>
+            <div class="d-flex align-items-center">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                    {{ event.organizer.first_name|first|default:event.organizer.username|first|upper }}
+                </div>
+                <div>
+                    <strong>{{ event.organizer.get_full_name|default:event.organizer.username }}</strong>
+                    <br>
+                    <small class="text-muted">{{ event.organizer.email }}</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Actions Rapides -->
+        <div class="content-card">
+            <h6><i class="fas fa-bolt me-2"></i>Actions Rapides</h6>
+            <div class="d-grid gap-2">
+                <a href="/admin/events/event/{{ event.id }}/change/" class="btn btn-outline-warning btn-sm">
+                    <i class="fas fa-edit me-2"></i>Modifier l'événement
+                </a>
+                <a href="/admin/events/eventregistration/?event__id__exact={{ event.id }}" class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-users me-2"></i>Gérer les inscriptions
+                </a>
+                {% if event.status == 'draft' %}
+                <button class="btn btn-outline-success btn-sm" onclick="publishEvent()">
+                    <i class="fas fa-check me-2"></i>Publier l'événement
+                </button>
+                {% endif %}
+                {% if event.status == 'published' %}
+                <button class="btn btn-outline-danger btn-sm" onclick="cancelEvent()">
+                    <i class="fas fa-times me-2"></i>Annuler l'événement
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function updateStatus(registrationId, newStatus) {
+    if (confirm(`Êtes-vous sûr de vouloir changer le statut de cette inscription ?`)) {
+        fetch('/events/api/update-registration-status/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                registration_id: registrationId,
+                status: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Erreur: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Erreur lors de la mise à jour');
+        });
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function publishEvent() {
+    if (confirm('Êtes-vous sûr de vouloir publier cet événement ?')) {
+        window.location.href = `/admin/events/event/{{ event.id }}/change/`;
+    }
+}
+
+function cancelEvent() {
+    if (confirm('Êtes-vous sûr de vouloir annuler cet événement ?')) {
+        window.location.href = `/admin/events/event/{{ event.id }}/change/`;
+    }
+}
+</script>
+{% endblock %}

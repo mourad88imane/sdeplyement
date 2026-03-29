@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug API - Test CORS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug API - Test CORS</h1>
+    
+    <div class="test-section info">
+        <h3>📡 Informations</h3>
+        <p><strong>URL API:</strong> <code>http://127.0.0.1:8000/api/auth/register/</code></p>
+        <p><strong>Frontend:</strong> <code>localhost:5173</code></p>
+        <p><strong>Backend:</strong> <code>127.0.0.1:8000</code></p>
+    </div>
+
+    <div class="test-section">
+        <h3>🧪 Tests</h3>
+        <button onclick="testPreflight()">1. Test Preflight (OPTIONS)</button>
+        <button onclick="testSimpleGet()">2. Test GET Simple</button>
+        <button onclick="testRegistration()">3. Test Inscription</button>
+        <button onclick="testFromLocalhost5173()">4. Test depuis localhost:5173</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000/api/auth/register/';
+        const resultsDiv = document.getElementById('results');
+
+        function addResult(title, content, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-section ${type}`;
+            div.innerHTML = `<h4>${title}</h4><pre>${content}</pre>`;
+            resultsDiv.appendChild(div);
+        }
+
+        async function testPreflight() {
+            try {
+                addResult('🔄 Test Preflight en cours...', 'Envoi de la requête OPTIONS...');
+                
+                const response = await fetch(API_URL, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': 'http://localhost:5173',
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+
+                const headers = {};
+                for (let [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+
+                const result = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: headers
+                };
+
+                addResult('✅ Preflight SUCCESS', JSON.stringify(result, null, 2), 'success');
+            } catch (error) {
+                addResult('❌ Preflight ERROR', error.message, 'error');
+            }
+        }
+
+        async function testSimpleGet() {
+            try {
+                addResult('🔄 Test GET en cours...', 'Envoi de la requête GET...');
+                
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Origin': 'http://localhost:5173'
+                    }
+                });
+
+                const text = await response.text();
+                const result = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    body: text
+                };
+
+                addResult('✅ GET SUCCESS', JSON.stringify(result, null, 2), 'success');
+            } catch (error) {
+                addResult('❌ GET ERROR', error.message, 'error');
+            }
+        }
+
+        async function testRegistration() {
+            try {
+                addResult('🔄 Test Inscription en cours...', 'Envoi de la requête POST...');
+                
+                const testData = {
+                    username: 'test_debug_' + Date.now(),
+                    email: 'test_debug_' + Date.now() + '@ent.dz',
+                    password: 'password123',
+                    password_confirm: 'password123',
+                    first_name: 'Test',
+                    last_name: 'Debug'
+                };
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': 'http://localhost:5173'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const responseData = await response.json();
+                const result = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    data: responseData
+                };
+
+                if (response.ok) {
+                    addResult('✅ Inscription SUCCESS', JSON.stringify(result, null, 2), 'success');
+                } else {
+                    addResult('⚠️ Inscription ERROR (API)', JSON.stringify(result, null, 2), 'error');
+                }
+            } catch (error) {
+                addResult('❌ Inscription ERROR (Network)', error.message, 'error');
+            }
+        }
+
+        async function testFromLocalhost5173() {
+            addResult('🔄 Test localhost:5173', 'Simulation d\'une requête depuis votre frontend...');
+            
+            // Simuler exactement ce que fait votre frontend
+            try {
+                const testData = {
+                    username: 'frontend_test_' + Date.now(),
+                    email: 'frontend_test_' + Date.now() + '@ent.dz',
+                    password: 'password123',
+                    password_confirm: 'password123',
+                    first_name: 'Frontend',
+                    last_name: 'Test'
+                };
+
+                // Utiliser fetch exactement comme votre frontend
+                const response = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Simuler l'origine de votre frontend
+                        'Origin': 'http://localhost:5173'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+
+                const result = await response.json();
+                console.log('Response data:', result);
+
+                if (response.ok) {
+                    addResult('✅ Frontend Simulation SUCCESS', 
+                        `Status: ${response.status}\nData: ${JSON.stringify(result, null, 2)}`, 
+                        'success');
+                } else {
+                    addResult('⚠️ Frontend Simulation ERROR', 
+                        `Status: ${response.status}\nError: ${result.error}`, 
+                        'error');
+                }
+            } catch (error) {
+                addResult('❌ Frontend Simulation FAILED', 
+                    `Error: ${error.message}\nStack: ${error.stack}`, 
+                    'error');
+                
+                // Diagnostic supplémentaire
+                addResult('🔍 Diagnostic', 
+                    `Vérifiez que:
+1. Le serveur Django fonctionne sur http://127.0.0.1:8000
+2. CORS est bien configuré
+3. Votre frontend utilise la bonne URL
+4. Il n'y a pas de proxy ou firewall qui bloque`, 
+                    'info');
+            }
+        }
+
+        // Test automatique au chargement
+        window.addEventListener('load', () => {
+            addResult('🚀 Page de debug chargée', 
+                `Timestamp: ${new Date().toISOString()}\nUser Agent: ${navigator.userAgent}`, 
+                'info');
+        });
+    </script>
+</body>
+</html>

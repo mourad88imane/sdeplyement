@@ -1,0 +1,56 @@
+Debugging deepcopy on Admin classes...
+Instantiating CourseAdmin...
+Inspecting CourseAdmin instance attributes...
+Key: model, Type: <class 'django.db.models.base.ModelBase'>
+Key: opts, Type: <class 'django.db.models.options.Options'>
+Key: admin_site, Type: <class 'django.contrib.admin.sites.AdminSite'>
+Key: formfield_overrides, Type: <class 'dict'>
+Deepcopying CourseAdmin instance...
+FAILURE: CourseAdmin deepcopy failed: cannot pickle 'module' object
+Traceback (most recent call last):
+  File "C:\Users\USER PC\Desktop\site_full\sites\site_full\backend\debug_deepcopy.py", line 31, in debug_deepcopy
+    ma_copy = copy.deepcopy(ma)
+  File "C:\Python314\Lib\copy.py", line 157, in deepcopy
+    y = _reconstruct(x, memo, *rv)
+  File "C:\Python314\Lib\copy.py", line 240, in _reconstruct
+    state = deepcopy(state, memo)
+  File "C:\Python314\Lib\copy.py", line 131, in deepcopy
+    y = copier(x, memo)
+  File "C:\Python314\Lib\copy.py", line 202, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 157, in deepcopy
+    y = _reconstruct(x, memo, *rv)
+  File "C:\Python314\Lib\copy.py", line 240, in _reconstruct
+    state = deepcopy(state, memo)
+  File "C:\Python314\Lib\copy.py", line 131, in deepcopy
+    y = copier(x, memo)
+  File "C:\Python314\Lib\copy.py", line 202, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 157, in deepcopy
+    y = _reconstruct(x, memo, *rv)
+  File "C:\Python314\Lib\copy.py", line 240, in _reconstruct
+    state = deepcopy(state, memo)
+  File "C:\Python314\Lib\copy.py", line 131, in deepcopy
+    y = copier(x, memo)
+  File "C:\Python314\Lib\copy.py", line 202, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 131, in deepcopy
+    y = copier(x, memo)
+  File "C:\Python314\Lib\copy.py", line 202, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 157, in deepcopy
+    y = _reconstruct(x, memo, *rv)
+  File "C:\Python314\Lib\copy.py", line 240, in _reconstruct
+    state = deepcopy(state, memo)
+  File "C:\Python314\Lib\copy.py", line 131, in deepcopy
+    y = copier(x, memo)
+  File "C:\Python314\Lib\copy.py", line 202, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Python314\Lib\copy.py", line 146, in deepcopy
+    rv = reductor(4)
+TypeError: cannot pickle 'module' object

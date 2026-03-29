@@ -1,0 +1,251 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Statistiques des Événements - ENT Admin{% endblock %}
+{% block page_title %}Statistiques des Événements{% endblock %}
+
+{% block content %}
+<!-- Statistiques Générales -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-primary">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-number text-primary">{{ stats.total_events }}</div>
+            <div class="stat-label">Total Événements</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-number text-success">{{ stats.published_events }}</div>
+            <div class="stat-label">Publiés</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-info">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-number text-info">{{ stats.upcoming_events }}</div>
+            <div class="stat-label">À venir</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-warning">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number text-warning">{{ registrations_by_month|length }}</div>
+            <div class="stat-label">Inscriptions (6 mois)</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Graphique des Événements par Catégorie -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-chart-pie me-2"></i>Événements par Catégorie</h5>
+            <canvas id="eventsByCategoryChart" height="300"></canvas>
+        </div>
+    </div>
+    
+    <!-- Graphique des Inscriptions par Mois -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-chart-line me-2"></i>Inscriptions par Mois</h5>
+            <canvas id="registrationsByMonthChart" height="300"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Événements Populaires -->
+<div class="content-card">
+    <h5><i class="fas fa-trophy me-2"></i>Top 10 Événements Populaires</h5>
+    
+    {% if popular_events %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Événement</th>
+                        <th>Catégorie</th>
+                        <th>Date</th>
+                        <th>Inscriptions</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in popular_events %}
+                    <tr>
+                        <td>
+                            <span class="badge bg-{% if forloop.counter <= 3 %}warning{% else %}secondary{% endif %}">
+                                #{{ forloop.counter }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if event.image %}
+                                    <img src="{{ event.image.url }}" alt="Image" class="rounded me-3" width="40" height="40" style="object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <strong>{{ event.title_fr }}</strong>
+                                    {% if event.is_featured %}
+                                        <i class="fas fa-star text-warning ms-1" title="Mis en avant"></i>
+                                    {% endif %}
+                                    <br>
+                                    <small class="text-muted">{{ event.location }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge" style="background-color: {{ event.category.color }};">
+                                {{ event.category.name_fr }}
+                            </span>
+                        </td>
+                        <td>
+                            <strong>{{ event.start_date|date:"d/m/Y" }}</strong><br>
+                            <small class="text-muted">{{ event.start_date|date:"H:i" }}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary">{{ event.registrations_count }}</span>
+                            {% if event.max_participants %}
+                                <small class="text-muted">/ {{ event.max_participants }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge bg-{% if event.status == 'published' %}success{% elif event.status == 'draft' %}warning{% elif event.status == 'cancelled' %}danger{% else %}secondary{% endif %}">
+                                {{ event.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-primary" title="Voir détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="/admin/events/event/{{ event.id }}/change/" class="btn btn-outline-warning" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Aucun événement trouvé.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Actions Rapides -->
+<div class="content-card mt-4">
+    <h5><i class="fas fa-bolt me-2"></i>Actions Rapides</h5>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="/admin/events/event/add/" class="btn btn-primary w-100">
+                <i class="fas fa-plus me-2"></i>Nouvel Événement
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/admin/events/eventcategory/" class="btn btn-outline-info w-100">
+                <i class="fas fa-tags me-2"></i>Gérer Catégories
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/events/management/" class="btn btn-outline-success w-100">
+                <i class="fas fa-list me-2"></i>Tous les Événements
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/admin/events/eventregistration/" class="btn btn-outline-warning w-100">
+                <i class="fas fa-users me-2"></i>Inscriptions
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Configuration des couleurs
+const colors = {
+    primary: '#667eea',
+    secondary: '#764ba2',
+    success: '#28a745',
+    warning: '#ffc107',
+    danger: '#dc3545',
+    info: '#17a2b8'
+};
+
+// Graphique des événements par catégorie
+const eventsByCategoryCtx = document.getElementById('eventsByCategoryChart').getContext('2d');
+const eventsByCategoryChart = new Chart(eventsByCategoryCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for item in events_by_category %}'{{ item.name_fr }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for item in events_by_category %}{{ item.events_count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: [
+                {% for item in events_by_category %}'{{ item.color|default:"#667eea" }}'{% if not forloop.last %},{% endif %}{% endfor %}
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Graphique des inscriptions par mois
+const registrationsByMonthCtx = document.getElementById('registrationsByMonthChart').getContext('2d');
+const registrationsByMonthChart = new Chart(registrationsByMonthCtx, {
+    type: 'line',
+    data: {
+        labels: [{% for item in registrations_by_month %}'{{ item.month|date:"M Y" }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Inscriptions',
+            data: [{% for item in registrations_by_month %}{{ item.count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            borderColor: colors.primary,
+            backgroundColor: colors.primary + '20',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

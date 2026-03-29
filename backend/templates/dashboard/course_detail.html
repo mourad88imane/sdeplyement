@@ -1,0 +1,317 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ course.title_fr }} - Détails Cours{% endblock %}
+{% block page_title %}Détails du Cours{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Informations Principales -->
+    <div class="col-md-8">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5><i class="fas fa-graduation-cap me-2"></i>{{ course.title_fr }}</h5>
+                <div>
+                    <a href="{% url 'courses_management' %}" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                    <a href="/admin/courses/course/{{ course.id }}/change/" class="btn btn-primary">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    {% if course.image %}
+                    <img src="{{ course.image.url }}" alt="{{ course.title_fr }}"
+                        class="img-fluid rounded shadow-sm mb-3">
+                    {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded mb-3"
+                        style="height: 200px;">
+                        <i class="fas fa-graduation-cap fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+
+                    {% if course.video_url %}
+                    <div class="mb-3">
+                        <a href="{{ course.video_url }}" target="_blank" class="btn btn-outline-danger w-100">
+                            <i class="fab fa-youtube me-2"></i>Voir la vidéo de présentation
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-7">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">Informations Générales</h6>
+                        {% if course.label %}
+                        <span class="badge bg-secondary">{{ course.label }}</span>
+                        {% endif %}
+                    </div>
+
+                    <table class="table table-sm">
+                        <tr>
+                            <td class="w-35 text-muted">Catégorie:</td>
+                            <td>
+                                {% with bg_color=course.category.color|default:'#3498db' %}
+                                <span class="badge" style="background-color: {{ bg_color }};">
+                                    {{ course.category.name_fr }}
+                                </span>
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Type:</td>
+                            <td>
+                                <span class="badge bg-info">
+                                    {{ course.get_course_type_display|default:course.course_type }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Statut:</td>
+                            <td>
+                                <span
+                                    class="badge bg-{% if course.status == 'published' %}success{% elif course.status == 'draft' %}warning{% elif course.status == 'archived' %}secondary{% else %}secondary{% endif %}">
+                                    {{ course.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Niveau:</td>
+                            <td>{{ course.get_level_display_fr }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Durée:</td>
+                            <td>
+                                {{ course.duration_weeks }} semaines
+                                {% if course.duration_hours %} / {{ course.duration_hours }} heures{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+<<<<<<< HEAD:site_full/backend/templates/admin/course_detail.html
+                            <td class="text-muted">Dates:</td>
+                            <td>
+                                {% if course.start_date %}
+                                {{ course.start_date|date:"d/m/Y" }} - {{ course.end_date|date:"d/m/Y"|default:"?" }}
+                                {% else %}
+                                <span class="text-muted font-italic">Non définies</span>
+                                {% endif %}
+                            </td>
+=======
+                            <td><strong>Grade cible:</strong></td>
+                            <td>{% if course.grade %}{{ course.get_grade_display }}{% else %}-{% endif %}</td>
+>>>>>>> b6c38a0bca31fcb94b49a6d3206074950a278344:site_full/backend/templates/dashboard/course_detail.html
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Prix:</td>
+                            <td>
+                                {% if course.is_free %}
+                                <span class="text-success fw-bold">Gratuit</span>
+                                {% else %}
+                                {{ course.price }} DA
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Inscription:</td>
+                            <td>
+                                {% if course.registration_open %}
+                                <span class="text-success"><i class="fas fa-check-circle me-1"></i>Ouverte</span>
+                                {% if course.registration_deadline %}
+                                <br><small class="text-muted">jusqu'au {{ course.registration_deadline|date:"d/m/Y"
+                                    }}</small>
+                                {% endif %}
+                                {% else %}
+                                <span class="text-danger"><i class="fas fa-times-circle me-1"></i>Fermée</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Description & Contenu -->
+            <div class="mb-4">
+                <ul class="nav nav-tabs mb-3" id="courseTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="desc-tab" data-bs-toggle="tab" href="#desc"
+                            role="tab">Description</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="content-tab" data-bs-toggle="tab" href="#content" role="tab">Contenu
+                            Détaillé</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="prereq-tab" data-bs-toggle="tab" href="#prereq" role="tab">Prérequis &
+                            Objectifs</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="courseTabsContent">
+                    <div class="tab-pane fade show active" id="desc" role="tabpanel">
+                        <div class="p-3 bg-light rounded">
+                            <p class="mb-0">{{ course.description_fr|linebreaks }}</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="content" role="tabpanel">
+                        <div class="p-3 bg-light rounded">
+                            {% if course.content_fr %}
+                            {{ course.content_fr|linebreaks }}
+                            {% else %}
+                            <p class="text-muted fst-italic">Pas de contenu détaillé.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="prereq" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-check me-2 text-success"></i>Prérequis</h6>
+                                <div class="p-3 bg-light rounded h-100">
+                                    {% if course.prerequisites_fr %}
+                                    {{ course.prerequisites_fr|linebreaks }}
+                                    {% else %}
+                                    <p class="text-muted fst-italic">Aucun prérequis spécifié.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-bullseye me-2 text-primary"></i>Objectifs</h6>
+                                <div class="p-3 bg-light rounded h-100">
+                                    {% if course.objectives_fr %}
+                                    {{ course.objectives_fr|linebreaks }}
+                                    {% else %}
+                                    <p class="text-muted fst-italic">Aucun objectif spécifié.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ressources / PDF -->
+            {% if course.pdf_file or course.brochure_pdf %}
+            <div class="mb-4">
+                <h6><i class="fas fa-file-pdf me-2"></i>Ressources à Télécharger</h6>
+                <div class="d-flex gap-2">
+                    {% if course.pdf_file %}
+                    <a href="{{ course.pdf_file.url }}" class="btn btn-outline-info btn-sm" target="_blank">
+                        <i class="fas fa-download me-2"></i>Support de Cours (PDF)
+                    </a>
+                    {% endif %}
+                    {% if course.brochure_pdf %}
+                    <a href="{{ course.brochure_pdf.url }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+                        <i class="fas fa-file-alt me-2"></i>Brochure (PDF)
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Modules -->
+        <div class="content-card mt-4">
+            <h5><i class="fas fa-list me-2"></i>Modules ({{ modules.count }})</h5>
+            {% if modules %}
+            <ul class="list-group">
+                {% for module in modules %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ module.order }}. {{ module.title_fr }}</strong>
+                        <br>
+                        <small class="text-muted">{{ module.duration_hours }} heures</small>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">Aucun module défini.</p>
+            {% endif %}
+        </div>
+
+        <!-- Liste des Inscriptions -->
+        <div class="content-card mt-4">
+            <h5><i class="fas fa-users me-2"></i>Dernières Inscriptions</h5>
+
+            {% if enrollments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Étudiant</th>
+                            <th>Email</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in enrollments %}
+                        <tr>
+                            <td>{{ enrollment.student_name }}</td>
+                            <td>{{ enrollment.student_email }}</td>
+                            <td>
+                                <span
+                                    class="badge bg-{% if enrollment.status == 'approved' %}success{% elif enrollment.status == 'pending' %}warning{% elif enrollment.status == 'rejected' %}danger{% else %}secondary{% endif %}">
+                                    {{ enrollment.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ enrollment.enrolled_at|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-4">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <p class="text-muted">Aucune inscription pour ce cours.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sidebar avec Statistiques -->
+    <div class="col-md-4">
+        <!-- Statistiques -->
+        <div class="content-card">
+            <h6><i class="fas fa-chart-bar me-2"></i>Statistiques</h6>
+            <div class="row text-center">
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-primary">{{ course_stats.total_enrollments }}</div>
+                    <div class="stat-label">TotalInscrits</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-success">{{ course_stats.approved_enrollments }}</div>
+                    <div class="stat-label">Approuvés</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-warning">{{ course_stats.pending_enrollments }}</div>
+                    <div class="stat-label">En attente</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-number text-secondary">{{ course_stats.views }}</div>
+                    <div class="stat-label">Vues</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Rapides -->
+        <div class="content-card">
+            <h6><i class="fas fa-bolt me-2"></i>Actions Rapides</h6>
+            <div class="d-grid gap-2">
+                <a href="/admin/courses/course/{{ course.id }}/change/" class="btn btn-outline-warning btn-sm">
+                    <i class="fas fa-edit me-2"></i>Modifier le cours
+                </a>
+                <a href="/admin/courses/coursemodule/?course__id__exact={{ course.id }}"
+                    class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-list me-2"></i>Gérer les modules
+                </a>
+                {% if course.status == 'draft' %}
+                <!-- Add publish/draft buttons logic if needed similar to events -->
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

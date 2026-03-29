@@ -1,0 +1,395 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Gestion des Notifications - ENT Admin{% endblock %}
+{% block page_title %}Gestion des Notifications{% endblock %}
+
+{% block content %}
+<!-- Statistiques des Notifications -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-primary">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="stat-number text-primary">{{ stats.total_notifications }}</div>
+            <div class="stat-label">Total Notifications</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-warning">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="stat-number text-warning">{{ stats.unread_notifications }}</div>
+            <div class="stat-label">Non lues</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-number text-danger">{{ stats.important_notifications }}</div>
+            <div class="stat-label">Importantes</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-info">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="stat-number text-info">{{ stats.total_messages }}</div>
+            <div class="stat-label">Messages</div>
+        </div>
+    </div>
+</div>
+
+<!-- Onglets -->
+<div class="content-card">
+    <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications" type="button" role="tab">
+                <i class="fas fa-bell me-2"></i>Notifications Utilisateurs
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab">
+                <i class="fas fa-comments me-2"></i>Messages Bidirectionnels
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="reservations-tab" data-bs-toggle="tab" data-bs-target="#reservations" type="button" role="tab">
+                <i class="fas fa-bookmark me-2"></i>Réservations
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="emails-tab" data-bs-toggle="tab" data-bs-target="#emails" type="button" role="tab">
+                <i class="fas fa-envelope me-2"></i>Emails
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="notificationTabsContent">
+        <!-- Onglet Notifications -->
+        <div class="tab-pane fade show active" id="notifications" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center my-3">
+                <h5><i class="fas fa-bell me-2"></i>Notifications Utilisateurs</h5>
+                <a href="/admin/users/usernotification/add/" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nouvelle Notification
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Titre</th>
+                            <th>Type</th>
+                            <th>Priorité</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px;">
+                                        A
+                                    </div>
+                                    <div>
+                                        <strong>Ahmed Benali</strong>
+                                        <br><small class="text-muted">ahmed@ent.dz</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>Bienvenue dans la bibliothèque</strong>
+                                <br><small class="text-muted">Votre compte a été activé...</small>
+                            </td>
+                            <td><span class="badge bg-info">welcome</span></td>
+                            <td><span class="badge bg-success">normal</span></td>
+                            <td><span class="badge bg-warning">Non lue</span></td>
+                            <td><small>Il y a 2h</small></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-success" title="Marquer comme lue">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px;">
+                                        F
+                                    </div>
+                                    <div>
+                                        <strong>Fatima Khelifi</strong>
+                                        <br><small class="text-muted">fatima@ent.dz</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>Rappel: Retour de livre</strong>
+                                <br><small class="text-muted">Le livre "Clean Code" doit être retourné...</small>
+                            </td>
+                            <td><span class="badge bg-warning">reminder</span></td>
+                            <td><span class="badge bg-danger">urgent</span></td>
+                            <td><span class="badge bg-success">Lue</span></td>
+                            <td><small>Il y a 1h</small></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-info" title="Répondre">
+                                        <i class="fas fa-reply"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Onglet Messages -->
+        <div class="tab-pane fade" id="messages" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center my-3">
+                <h5><i class="fas fa-comments me-2"></i>Messages Bidirectionnels</h5>
+                <a href="/admin/users/adminusermessage/add/" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nouveau Message
+                </a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="list-group">
+                        <div class="list-group-item list-group-item-action active">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Ahmed Benali</h6>
+                                <small>Il y a 3h</small>
+                            </div>
+                            <p class="mb-1">Question sur l'emprunt de livres</p>
+                            <small class="text-muted">Combien de livres puis-je emprunter...</small>
+                        </div>
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Fatima Khelifi</h6>
+                                <small class="text-danger">Nouveau</small>
+                            </div>
+                            <p class="mb-1">Prolongation d'emprunt</p>
+                            <small class="text-muted">Puis-je prolonger l'emprunt de...</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-user me-2"></i>Conversation avec Ahmed Benali</h6>
+                        </div>
+                        <div class="card-body" style="height: 400px; overflow-y: auto;">
+                            <div class="message-thread">
+                                <div class="message user-message mb-3">
+                                    <div class="message-header">
+                                        <strong>Ahmed Benali</strong>
+                                        <small class="text-muted">Il y a 3h</small>
+                                    </div>
+                                    <div class="message-body bg-light p-3 rounded">
+                                        Bonjour, combien de livres puis-je emprunter simultanément ?
+                                    </div>
+                                </div>
+                                <div class="message admin-message mb-3">
+                                    <div class="message-header">
+                                        <strong>Admin</strong>
+                                        <small class="text-muted">Il y a 2h</small>
+                                    </div>
+                                    <div class="message-body bg-primary text-white p-3 rounded">
+                                        Bonjour Ahmed, vous pouvez emprunter jusqu'à 3 livres simultanément pour une durée de 2 semaines.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Tapez votre réponse...">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Onglet Réservations -->
+        <div class="tab-pane fade" id="reservations" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center my-3">
+                <h5><i class="fas fa-bookmark me-2"></i>Réservations de Livres</h5>
+                <a href="/admin/library/bookreservation/add/" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nouvelle Réservation
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Livre</th>
+                            <th>Utilisateur</th>
+                            <th>Date de réservation</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 50px;">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Clean Code</strong>
+                                        <br><small class="text-muted">Robert Martin</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>Ahmed Benali</strong>
+                                <br><small class="text-muted">ahmed@ent.dz</small>
+                            </td>
+                            <td>Demain 14:00</td>
+                            <td><span class="badge bg-warning">En attente</span></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-success" title="Confirmer">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger" title="Annuler">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-outline-info" title="Notifier">
+                                        <i class="fas fa-bell"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Onglet Emails -->
+        <div class="tab-pane fade" id="emails" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center my-3">
+                <h5><i class="fas fa-envelope me-2"></i>Templates et Logs Email</h5>
+                <a href="/admin/users/emailtemplate/add/" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nouveau Template
+                </a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Templates d'Email</h6>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Bienvenue</h6>
+                                <span class="badge bg-success">Actif</span>
+                            </div>
+                            <p class="mb-1">Email de bienvenue pour nouveaux utilisateurs</p>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Rappel d'emprunt</h6>
+                                <span class="badge bg-success">Actif</span>
+                            </div>
+                            <p class="mb-1">Rappel pour retour de livre</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6>Logs d'Envoi</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Destinataire</th>
+                                    <th>Sujet</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ahmed@ent.dz</td>
+                                    <td>Bienvenue</td>
+                                    <td><span class="badge bg-success">Envoyé</span></td>
+                                    <td>Il y a 2h</td>
+                                </tr>
+                                <tr>
+                                    <td>fatima@ent.dz</td>
+                                    <td>Rappel</td>
+                                    <td><span class="badge bg-danger">Échec</span></td>
+                                    <td>Il y a 1h</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions Rapides -->
+<div class="content-card">
+    <h5><i class="fas fa-bolt me-2"></i>Actions Rapides</h5>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="/admin/users/usernotification/" class="btn btn-outline-primary w-100">
+                <i class="fas fa-bell me-2"></i>Toutes les notifications
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/admin/users/adminusermessage/" class="btn btn-outline-info w-100">
+                <i class="fas fa-comments me-2"></i>Tous les messages
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/admin/library/bookreservation/" class="btn btn-outline-warning w-100">
+                <i class="fas fa-bookmark me-2"></i>Toutes les réservations
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/admin/users/emailtemplate/" class="btn btn-outline-success w-100">
+                <i class="fas fa-envelope me-2"></i>Templates email
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Initialiser les onglets Bootstrap
+var triggerTabList = [].slice.call(document.querySelectorAll('#notificationTabs button'))
+triggerTabList.forEach(function (triggerEl) {
+    var tabTrigger = new bootstrap.Tab(triggerEl)
+    
+    triggerEl.addEventListener('click', function (event) {
+        event.preventDefault()
+        tabTrigger.show()
+    })
+})
+</script>
+{% endblock %}

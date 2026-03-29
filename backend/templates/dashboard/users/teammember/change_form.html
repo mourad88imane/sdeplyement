@@ -1,0 +1,182 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if original %}Modifier{% else %}Ajouter{% endif %} un Membre de l'Équipe
+{% endblock %}
+
+{% block page_title %}
+    {% if original %}Modifier{% else %}Ajouter{% endif %} un Membre de l'Équipe
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="content-card">
+            <h5 class="mb-4">
+                <i class="fas fa-{% if original %}user-edit{% else %}user-plus{% endif %} me-2"></i>
+                Informations du Membre
+            </h5>
+
+            <form method="post" enctype="multipart/form-data" novalidate id="teamMemberForm">
+                {% csrf_token %}
+                
+                {% if errors %}
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if adminform.form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        {% for error in adminform.form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                    <!-- Photo et Infos de base -->
+                    <div class="col-md-4 text-center mb-4">
+                        <div class="mb-3">
+                            <label class="form-label d-block fw-bold">Photo de profil</label>
+                            <div class="avatar-upload-placeholder bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px; border: 2px dashed #ccc; overflow: hidden;">
+                                {% if original.photo %}
+                                    <img src="{{ original.photo.url }}" alt="Preview" class="w-100 h-100" style="object-fit: cover;">
+                                {% else %}
+                                    <i class="fas fa-camera fa-3x text-muted" id="photoIcon"></i>
+                                    <img src="#" alt="Preview" class="w-100 h-100 d-none" style="object-fit: cover;" id="photoPreview">
+                                {% endif %}
+                            </div>
+                            <input type="file" name="photo" class="form-control form-control-sm" id="id_photo" accept="image/*" onchange="previewImage(this)">
+                            {% if adminform.form.photo.errors %}
+                                <div class="text-danger small mt-1">{{ adminform.form.photo.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-check form-switch d-inline-block text-start mt-2">
+                            <input class="form-check-input" type="checkbox" name="is_director" id="id_is_director" {% if adminform.form.is_director.value %}checked{% endif %}>
+                            <label class="form-check-label fw-bold" for="id_is_director">Est Directeur des Études ?</label>
+                        </div>
+                    </div>
+
+                    <!-- Champs Principaux -->
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="id_full_name" class="form-label fw-bold">Nom Complet <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" name="full_name" class="form-control" id="id_full_name" value="{{ adminform.form.full_name.value|default:'' }}" required>
+                            </div>
+                            {% if adminform.form.full_name.errors %}
+                                <div class="text-danger small mt-1">{{ adminform.form.full_name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label fw-bold">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" name="email" class="form-control" id="id_email" value="{{ adminform.form.email.value|default:'' }}">
+                                </div>
+                                {% if adminform.form.email.errors %}
+                                <div class="text-danger small mt-1">{{ adminform.form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_phone" class="form-label fw-bold">Téléphone</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" name="phone" class="form-control" id="id_phone" value="{{ adminform.form.phone.value|default:'' }}">
+                                </div>
+                                {% if adminform.form.phone.errors %}
+                                <div class="text-danger small mt-1">{{ adminform.form.phone.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_role_fr" class="form-label fw-bold">Rôle (Français) <span class="text-danger">*</span></label>
+                                <input type="text" name="role_fr" class="form-control" id="id_role_fr" value="{{ adminform.form.role_fr.value|default:'' }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_role_ar" class="form-label fw-bold text-end w-100">Rôle (Arabe)</label>
+                                <input type="text" name="role_ar" class="form-control text-end" id="id_role_ar" value="{{ adminform.form.role_ar.value|default:'' }}" dir="rtl">
+                            </div>
+                        </div>
+
+                         <div class="mb-3">
+                            <label for="id_courses_taught" class="form-label fw-bold">Cours Enseignés</label>
+                            <textarea name="courses_taught" class="form-control" id="id_courses_taught" rows="2" placeholder="Ex: Mathématiques, Physique...">{{ adminform.form.courses_taught.value|default:'' }}</textarea>
+                             <div class="form-text">Liste des cours séparés par des virgules</div>
+                        </div>
+
+                        <div class="row">
+                             <div class="col-md-6 mb-3">
+                                <label for="id_description_fr" class="form-label fw-bold">Biographie (Français)</label>
+                                <textarea name="description_fr" class="form-control" id="id_description_fr" rows="3">{{ adminform.form.description_fr.value|default:'' }}</textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_description_ar" class="form-label fw-bold text-end w-100">Biographie (Arabe)</label>
+                                <textarea name="description_ar" class="form-control text-end" id="id_description_ar" rows="3" dir="rtl">{{ adminform.form.description_ar.value|default:'' }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 border-top pt-3">
+                             <label for="id_linkedin_url" class="form-label fw-bold"><i class="fab fa-linkedin text-primary me-1"></i>LinkedIn URL</label>
+                             <input type="url" name="linkedin_url" class="form-control" id="id_linkedin_url" value="{{ adminform.form.linkedin_url.value|default:'' }}" placeholder="https://linkedin.com/in/...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_order" class="form-label fw-bold">Ordre d'affichage</label>
+                            <input type="number" name="order" class="form-control w-25" id="id_order" value="{{ adminform.form.order.value|default:'0' }}">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <!-- Standard Admin Submit Buttons simulation -->
+                    <a href="{% url 'team_management' %}" class="btn btn-outline-secondary">Annuler</a>
+                    <button type="submit" name="_save" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                    <button type="submit" name="_addanother" class="btn btn-outline-primary">
+                        Enregistrer et ajouter un autre
+                    </button>
+                    <button type="submit" name="_continue" class="btn btn-outline-info">
+                        Enregistrer et continuer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('photoPreview');
+        const icon = document.getElementById('photoIcon');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+                if(icon) icon.classList.add('d-none');
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{% endblock %}

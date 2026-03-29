@@ -1,0 +1,302 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Gestion des Cours - ENT Admin{% endblock %}
+{% block page_title %}Gestion des Cours{% endblock %}
+
+{% block content %}
+<!-- Statistiques Modernes -->
+<div class="row mb-4 g-3">
+    <div class="col-md-2">
+        <div class="stat-card text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <div class="stat-icon text-white">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="stat-number text-white">{{ stats.total }}</div>
+            <div class="stat-label">Total Cours</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
+            <div class="stat-icon text-white">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-number text-white">{{ stats.published }}</div>
+            <div class="stat-label">Publiés</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+            <div class="stat-icon text-white">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="stat-number text-white">{{ stats.draft }}</div>
+            <div class="stat-label">Brouillons</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+            <div class="stat-icon text-white">
+                <i class="fas fa-archive"></i>
+            </div>
+            <div class="stat-number text-white">{{ stats.archived }}</div>
+            <div class="stat-label">Archivés</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
+            <div class="stat-icon text-white">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number text-white">{{ stats.total_enrollments }}</div>
+            <div class="stat-label">Inscriptions</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">
+            <div class="stat-icon" style="color: #d63384;">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-number" style="color: #d63384;">{{ stats.featured }}</div>
+            <div class="stat-label">Mis en avant</div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtres Modernes -->
+<div class="content-card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="m-0"><i class="fas fa-filter me-2 text-primary"></i>Filtres et Recherche</h5>
+        <div class="d-flex gap-2">
+            <a href="/admin/courses/coursecategory/add/" target="_blank" class="btn btn-outline-info">
+                <i class="fas fa-folder-plus me-1"></i> Ajouter Catégorie
+            </a>
+            <a href="?course_type=school" class="btn btn-outline-success {% if current_filters.course_type == 'school' %}active{% endif %}">
+                <i class="fas fa-school me-1"></i> Cours École
+            </a>
+            <a href="?course_type=ohb" class="btn btn-outline-warning {% if current_filters.course_type == 'ohb' %}active{% endif %}">
+                <i class="fas fa-graduation-cap me-1"></i> Cours OHB
+            </a>
+            {% if current_filters.course_type %}
+            <a href="{% url 'courses_management' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-times me-1"></i> Tout voir
+            </a>
+            {% endif %}
+            <a href="{% url 'course_add' %}" class="btn btn-success">
+                <i class="fas fa-plus me-2"></i>Nouveau Cours
+            </a>
+        </div>
+    </div>
+
+    <form method="get" class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Catégorie</label>
+            <select name="category" class="form-select border-2 shadow-sm">
+                <option value="">Toutes les catégories</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if current_filters.category|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>
+                    {{ category.name_fr }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label fw-semibold">Statut</label>
+            <select name="status" class="form-select border-2 shadow-sm">
+                <option value="">Tous les statuts</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label fw-semibold">Type</label>
+            <select name="type" class="form-select border-2 shadow-sm">
+                <option value="">Tous les types</option>
+                {% for value, label in type_choices %}
+                    <option value="{{ value }}" {% if current_filters.type == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Recherche</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-2 border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" name="search" class="form-control border-2 border-start-0 shadow-sm" placeholder="Titre, description..." value="{{ current_filters.search }}">
+            </div>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <div class="d-grid w-100">
+                <button type="submit" class="btn btn-primary shadow-sm">
+                    <i class="fas fa-search me-2"></i>Filtrer
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Liste des Cours - Cartes Modernes -->
+<div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="m-0"><i class="fas fa-list me-2 text-primary"></i>Liste des Cours</h5>
+        <span class="badge bg-primary fs-6 px-3 py-2">{{ courses.paginator.count }} cours</span>
+    </div>
+
+    {% if courses %}
+    <div class="row g-4">
+        {% for course in courses %}
+        <div class="col-md-6 col-lg-4">
+            <div class="course-card h-100 shadow-sm border-0" style="transition: all 0.3s ease;">
+                <div class="position-relative">
+                    {% if course.image %}
+                    <img src="{{ course.image.url }}" alt="Image" class="card-img-top" style="height: 160px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 160px;">
+                        <i class="fas fa-book-open fa-4x text-white opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    <div class="position-absolute top-0 end-0 p-2">
+                        {% if course.featured %}
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-star me-1"></i>Featured
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 p-2">
+                        <span class="badge bg-{% if course.status == 'published' %}success{% elif course.status == 'draft' %}warning{% else %}secondary{% endif %}">
+                            {{ course.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-truncate mb-2">{{ course.title_fr }}</h5>
+                    <p class="card-text text-muted small mb-3">{{ course.description_fr|truncatechars:80 }}</p>
+                    
+                    <div class="d-flex flex-wrap gap-1 mb-3">
+                        <span class="badge bg-info">
+                            <i class="fas fa-folder me-1"></i>{{ course.category.name_fr|default:"Non classé" }}
+                        </span>
+                        <span class="badge bg-secondary">
+                            <i class="fas fa-tag me-1"></i>{{ course.get_course_type_display }}
+                        </span>
+                        <span class="badge bg-{% if course.level == 'beginner' %}success{% elif course.level == 'intermediate' %}warning{% elif course.level == 'advanced' %}danger{% else %}dark{% endif %}">
+                            {{ course.get_level_display }}
+                        </span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center text-muted small">
+                        <span><i class="fas fa-clock me-1"></i>{{ course.duration_weeks }} sem</span>
+                        <span><i class="fas fa-users me-1"></i>{{ course.enrollments.count }}/{{ course.max_students }}</span>
+                        <span><i class="fas fa-calendar me-1"></i>{{ course.created_at|date:"d/m/y" }}</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'course_detail' course.id %}" class="btn btn-sm btn-outline-primary flex-fill" title="Voir détails">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        {% if course.course_type == 'ohb' %}
+                        <a href="/admin/ohb_formation/formation/{{ course.id }}/change/" class="btn btn-sm btn-outline-warning flex-fill" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'course_edit' course.id %}" class="btn btn-sm btn-outline-warning flex-fill" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        {% endif %}
+                        <button class="btn btn-sm btn-outline-danger flex-fill" title="Supprimer"
+                            onclick="confirmDelete('{{ course.title_fr|escapejs }}', '{{ course.id }}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="mb-3">
+            <i class="fas fa-book-open fa-5x text-muted opacity-25"></i>
+        </div>
+        <h5 class="text-muted">Aucun cours trouvé</h5>
+        <p class="text-muted">Essayez de modifier vos critères de recherche ou ajoutez un nouveau cours.</p>
+        <a href="{% url 'course_add' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Ajouter un cours
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Pagination Moderne -->
+    {% if courses.has_other_pages %}
+    <nav aria-label="Pagination" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if courses.has_previous %}
+            <li class="page-item">
+                <a class="page-link shadow-sm"
+                    href="?page={{ courses.previous_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in courses.paginator.page_range %}
+            {% if courses.number == num %}
+            <li class="page-item active">
+                <span class="page-link bg-primary border-primary">{{ num }}</span>
+            </li>
+            {% elif num > courses.number|add:'-3' and num < courses.number|add:'3' %}
+            <li class="page-item">
+                <a class="page-link shadow-sm"
+                    href="?page={{ num }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if courses.has_next %}
+            <li class="page-item">
+                <a class="page-link shadow-sm"
+                    href="?page={{ courses.next_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+    .course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .page-link {
+        border-radius: 50px;
+        margin: 0 3px;
+    }
+    
+    .form-select:focus, .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function confirmDelete(courseName, courseId) {
+        if (confirm(`Êtes-vous sûr de vouloir supprimer le cours "${courseName}" ?`)) {
+            window.location.href = `/admin/courses/course/${courseId}/delete/`;
+        }
+    }
+</script>
+{% endblock %}

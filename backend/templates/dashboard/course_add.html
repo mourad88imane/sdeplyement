@@ -1,0 +1,278 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Ajouter un Nouveau Cours - ENT{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .form-section h5 {
+        color: #1e3a5f;
+        border-bottom: 3px solid #10b981;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .required-field {
+        color: #ef4444;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+    
+    .btn-secondary {
+        background: #6b7280;
+        border: none;
+        padding: 0.75rem 2rem;
+    }
+    
+    .image-preview {
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 2px dashed #d1d5db;
+    }
+    
+    .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="fas fa-plus-circle me-2 text-success"></i>Ajouter un Nouveau Cours</h2>
+            <p class="text-muted">Créez un nouveau cours pour l'École Nationale des Transmissions</p>
+        </div>
+        <div>
+            <a href="{% url 'courses_management' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+            </a>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="course_type" value="school">
+        <input type="hidden" name="status" value="published">
+
+        <!-- 1. Image du Cours -->
+        <div class="form-section">
+            <h5><i class="fas fa-image me-2"></i>Image du Cours</h5>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="image-preview" id="imagePreview">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-cloud-upload-alt fa-3x mb-2"></i>
+                            <p>Cliquez pour télécharger une image</p>
+                        </div>
+                    </div>
+                    <input type="file" class="form-control mt-3" id="image" name="image" accept="image/*" onchange="previewImage(this)">
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted small">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Formats recommandés: JPG, PNG<br>
+                        Taille optimale: 800x600 pixels<br>
+                        L'image sera affichée sur la page d'accueil
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Nom du Cours (3 langues) -->
+        <div class="form-section">
+            <h5><i class="fas fa-heading me-2"></i>Nom du Cours</h5>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="title_fr" class="form-label fw-semibold">
+                        <span class="fi fi-fr me-1"></span> Français <span class="required-field">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="title_fr" name="title_fr" 
+                           placeholder="Nom du cours en français" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="title_ar" class="form-label fw-semibold">
+                        <span class="fi fi-tn me-1"></span> العربية
+                    </label>
+                    <input type="text" class="form-control" id="title_ar" name="title_ar" 
+                           placeholder="اسم الدورة بالعربية" dir="rtl">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="title_en" class="form-label fw-semibold">
+                        <span class="fi fi-gb me-1"></span> English
+                    </label>
+                    <input type="text" class="form-control" id="title_en" name="title_en" 
+                           placeholder="Course name in English">
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Catégorie -->
+        <div class="form-section">
+            <h5><i class="fas fa-folder me-2"></i>Catégorie du Cours</h5>
+            
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label for="category" class="form-label fw-semibold">Sélectionner la catégorie <span class="required-field">*</span></label>
+                    <select class="form-select form-select-lg" id="category" name="category" required>
+                        <option value="">-- Choisir une catégorie --</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name_fr }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Catégories disponibles -->
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <p class="text-muted small mb-2">Catégories disponibles:</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for category in categories %}
+                        <span class="badge bg-light text-dark border">
+                            <i class="fas fa-{{ category.icon|default:'folder' }} me-1"></i>
+                            {{ category.name_fr }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Grade Cible -->
+        <div class="form-section">
+            <h5><i class="fas fa-user-graduate me-2"></i>Grade Cible</h5>
+            
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-semibold">Sélectionner le(s) grade(s) cible(s)</label>
+                    <div class="row mt-2">
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="grade_its" name="grades" value="its">
+                                <label class="form-check-label" for="grade_its">
+                                    <i class="fas fa-tools me-1"></i> Inspecteur Technique Spécialisé
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="grade_itsa" name="grades" value="itsa">
+                                <label class="form-check-label" for="grade_itsa">
+                                    <i class="fas fa-hands-helping me-1"></i> Assistant Technique Spécialisé
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="grade_ae" name="grades" value="ae">
+                                <label class="form-check-label" for="grade_ae">
+                                    <i class="fas fa-user-cog me-1"></i> Agent d'Exploitation
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-text">Vous pouvez sélectionner plusieurs grades</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Durée -->
+        <div class="form-section">
+            <h5><i class="fas fa-clock me-2"></i>Durée de la Formation</h5>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="duration_hours" class="form-label fw-semibold">
+                        <i class="fas fa-hourglass-half me-1"></i> Durée (heures)
+                    </label>
+                    <input type="number" class="form-control" id="duration_hours" name="duration_hours" 
+                           placeholder="Ex: 120" min="0">
+                    <div class="form-text">Durée totale de la formation en heures</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="duration_weeks" class="form-label fw-semibold">
+                        <i class="fas fa-calendar-week me-1"></i> Durée (semaines)
+                    </label>
+                    <input type="number" class="form-control" id="duration_weeks" name="duration_weeks" 
+                           placeholder="Ex: 4" min="1" value="1">
+                    <div class="form-text">Durée en semaines</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutons -->
+        <div class="form-section">
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'courses_management' %}" class="btn btn-secondary">
+                    <i class="fas fa-times me-2"></i>Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Créer le Cours
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview">';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('title_fr').focus();
+    });
+</script>
+{% endblock %}

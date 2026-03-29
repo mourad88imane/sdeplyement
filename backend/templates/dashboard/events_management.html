@@ -1,0 +1,261 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Gestion des Événements - ENT Admin{% endblock %}
+{% block page_title %}Gestion des Événements{% endblock %}
+
+{% block content %}
+<!-- Statistiques -->
+<div class="row mb-4">
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-primary">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-number text-primary">{{ stats.total }}</div>
+            <div class="stat-label">Total Événements</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-number text-success">{{ stats.published }}</div>
+            <div class="stat-label">Publiés</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-warning">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="stat-number text-warning">{{ stats.draft }}</div>
+            <div class="stat-label">Brouillons</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-info">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-number text-info">{{ stats.upcoming }}</div>
+            <div class="stat-label">À venir</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-danger">
+                <i class="fas fa-play"></i>
+            </div>
+            <div class="stat-number text-danger">{{ stats.ongoing }}</div>
+            <div class="stat-label">En cours</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-secondary">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number text-secondary">{{ stats.total_registrations }}</div>
+            <div class="stat-label">Inscriptions</div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtres et Actions -->
+<div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5><i class="fas fa-filter me-2"></i>Filtres et Recherche</h5>
+        <a href="/admin/events/event/add/" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouvel Événement
+        </a>
+    </div>
+    
+    <form method="get" class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Catégorie</label>
+            <select name="category" class="form-select">
+                <option value="">Toutes les catégories</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if current_filters.category == category.id|stringformat:"s" %}selected{% endif %}>
+                        {{ category.name_fr }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Statut</label>
+            <select name="status" class="form-select">
+                <option value="">Tous les statuts</option>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Recherche</label>
+            <input type="text" name="search" class="form-control" placeholder="Titre, lieu, description..." value="{{ current_filters.search }}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">&nbsp;</label>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i>Filtrer
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Liste des Événements -->
+<div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5><i class="fas fa-list me-2"></i>Liste des Événements</h5>
+        <span class="badge bg-primary">{{ events.paginator.count }} événement{{ events.paginator.count|pluralize }}</span>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Événement</th>
+                    <th>Catégorie</th>
+                    <th>Date/Heure</th>
+                    <th>Lieu</th>
+                    <th>Inscriptions</th>
+                    <th>Statut</th>
+                    <th>Priorité</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            {% if event.image %}
+                                <img src="{{ event.image.url }}" alt="Image" class="rounded me-3" width="50" height="50" style="object-fit: cover;">
+                            {% else %}
+                                <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <strong>{{ event.title_fr }}</strong>
+                                {% if event.is_featured %}
+                                    <i class="fas fa-star text-warning ms-1" title="Mis en avant"></i>
+                                {% endif %}
+                                <br>
+                                <small class="text-muted">{{ event.description_fr|truncatechars:50 }}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge" style="background-color: {{ event.category.color }};">
+                            {{ event.category.name_fr }}
+                        </span>
+                    </td>
+                    <td>
+                        <strong>{{ event.start_date|date:"d/m/Y" }}</strong><br>
+                        <small class="text-muted">{{ event.start_date|date:"H:i" }} - {{ event.end_date|date:"H:i" }}</small>
+                    </td>
+                    <td>
+                        <i class="fas fa-map-marker-alt text-muted me-1"></i>
+                        {{ event.location }}
+                        {% if event.room %}
+                            <br><small class="text-muted">{{ event.room }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge bg-primary">{{ event.registrations_count }}</span>
+                        {% if event.max_participants %}
+                            <small class="text-muted">/ {{ event.max_participants }}</small>
+                        {% endif %}
+                        {% if event.is_full %}
+                            <br><small class="text-danger">Complet</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge bg-{% if event.status == 'published' %}success{% elif event.status == 'draft' %}warning{% elif event.status == 'cancelled' %}danger{% else %}secondary{% endif %}">
+                            {{ event.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-{% if event.priority == 'urgent' %}danger{% elif event.priority == 'high' %}warning{% elif event.priority == 'normal' %}info{% else %}secondary{% endif %}">
+                            {{ event.get_priority_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-primary" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="/admin/events/event/{{ event.id }}/change/" class="btn btn-outline-warning" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-outline-danger" title="Supprimer" onclick="confirmDelete('{{ event.title_fr }}', {{ event.id }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Aucun événement trouvé avec ces critères.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if events.has_other_pages %}
+    <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+            {% if events.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ events.previous_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+            
+            {% for num in events.paginator.page_range %}
+                {% if events.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > events.number|add:'-3' and num < events.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if events.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ events.next_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmDelete(eventName, eventId) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer l'événement "${eventName}" ?`)) {
+        window.location.href = `/admin/events/event/${eventId}/delete/`;
+    }
+}
+</script>
+{% endblock %}

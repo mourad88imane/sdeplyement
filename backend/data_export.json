@@ -1,0 +1,1218 @@
+[
+{
+  "model": "authentication.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$szsQ5Gb5hSGYpK9H9mkubR$GieABzNK/Gg6fEENG3SOX01U+LKMCxIN3xXXo6Eidqk=",
+    "last_login": "2026-03-16T13:00:04.209Z",
+    "is_superuser": true,
+    "username": "imane",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-03-13T13:47:09.947Z",
+    "email": "bimane040@gmail.com",
+    "first_name": "benmoussa",
+    "last_name": "imane",
+    "is_verified": false,
+    "created_at": "2026-03-13T13:47:10.286Z",
+    "updated_at": "2026-03-13T13:47:10.286Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "authentication.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$yPz8Gdqf2YXTm2DvrEW2FQ$o71q4deu6QZddV3ljHU7uDkBBvY0Lmqv78gL/eG2aKo=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "ent",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-03-13T13:49:15.379Z",
+    "email": "bimane@gmail.com",
+    "first_name": "ecole",
+    "last_name": "national",
+    "is_verified": false,
+    "created_at": "2026-03-13T13:49:15.719Z",
+    "updated_at": "2026-03-13T13:49:15.719Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "authentication.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$l9HncMVFfOCsxKuXGQ7KHF$9eaCxJdwETTwrRb2mFdQGYn3Kr+PP1saGWs3j6vpPH8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "zahra",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-14T04:40:37.779Z",
+    "email": "zahra.aitmekideche@gmail.com",
+    "first_name": "زهرة",
+    "last_name": "ايت مقيدش",
+    "is_verified": true,
+    "created_at": "2026-03-14T04:40:38.323Z",
+    "updated_at": "2026-03-14T04:40:38.357Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "authentication.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "ent"
+    ],
+    "phone": null,
+    "address": null,
+    "birth_date": null,
+    "gender": null,
+    "bio": null,
+    "avatar": "",
+    "website": null,
+    "occupation": null,
+    "organization": null,
+    "student_id": null,
+    "employee_id": null,
+    "language_preference": "fr",
+    "timezone": "Africa/Algiers",
+    "receive_notifications": true,
+    "receive_newsletter": false,
+    "created_at": "2026-03-13T13:49:15.736Z",
+    "updated_at": "2026-03-13T13:49:15.751Z"
+  }
+},
+{
+  "model": "authentication.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "phone": "+10555751588",
+    "address": "16 rue abdelkrim elagoun",
+    "birth_date": "2026-03-13",
+    "gender": "F",
+    "bio": "",
+    "avatar": "avatars/2026/03/recrutement.png",
+    "website": null,
+    "occupation": null,
+    "organization": "algiers",
+    "student_id": "123456789",
+    "employee_id": "897456321",
+    "language_preference": "fr",
+    "timezone": "Africa/Algiers",
+    "receive_notifications": true,
+    "receive_newsletter": false,
+    "created_at": "2026-03-13T13:49:45.612Z",
+    "updated_at": "2026-03-13T22:48:37.810Z"
+  }
+},
+{
+  "model": "authentication.userprofile",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "zahra"
+    ],
+    "phone": null,
+    "address": null,
+    "birth_date": null,
+    "gender": null,
+    "bio": null,
+    "avatar": "",
+    "website": null,
+    "occupation": null,
+    "organization": null,
+    "student_id": null,
+    "employee_id": null,
+    "language_preference": "fr",
+    "timezone": "Africa/Algiers",
+    "receive_notifications": true,
+    "receive_newsletter": false,
+    "created_at": "2026-03-14T04:40:38.341Z",
+    "updated_at": "2026-03-14T04:40:38.341Z"
+  }
+},
+{
+  "model": "courses.coursecategory",
+  "pk": 1,
+  "fields": {
+    "name_fr": "informatique",
+    "name_ar": "اعلام الي",
+    "description_fr": "",
+    "description_ar": "",
+    "icon": "info",
+    "created_at": "2026-03-16T06:16:49.646Z",
+    "updated_at": "2026-03-16T06:16:49.646Z"
+  }
+},
+{
+  "model": "courses.coursecategory",
+  "pk": 2,
+  "fields": {
+    "name_fr": "Reseaux",
+    "name_ar": "شبكات",
+    "description_fr": "",
+    "description_ar": "",
+    "icon": "network",
+    "created_at": "2026-03-16T06:16:58.915Z",
+    "updated_at": "2026-03-16T06:16:58.915Z"
+  }
+},
+{
+  "model": "courses.course",
+  "pk": 1,
+  "fields": {
+    "title_fr": "HF",
+    "title_ar": "التواتر العالي",
+    "label": "",
+    "course_type": "school",
+    "slug": "",
+    "description_fr": "",
+    "description_ar": "",
+    "content_fr": "",
+    "content_ar": "",
+    "category": 2,
+    "level": "",
+    "duration_weeks": 0,
+    "duration_hours": null,
+    "max_students": 30,
+    "image": "courses/images/Capture_décran_2026-03-12_120059.png",
+    "video_url": "",
+    "pdf_file": "",
+    "brochure_pdf": "",
+    "prerequisites_fr": "",
+    "prerequisites_ar": "",
+    "objectives_fr": "",
+    "objectives_ar": "",
+    "price": "0.00",
+    "is_free": true,
+    "registration_open": true,
+    "registration_deadline": null,
+    "start_date": null,
+    "end_date": null,
+    "status": "published",
+    "featured": false,
+    "views_count": 0,
+    "grade": null,
+    "created_by": [
+      "imane"
+    ],
+    "created_at": "2026-03-16T06:17:50.403Z",
+    "updated_at": "2026-03-16T06:17:50.403Z"
+  }
+},
+{
+  "model": "news.newscategory",
+  "pk": 1,
+  "fields": {
+    "name_fr": "succes alumni",
+    "name_ar": "حفلة التخرج",
+    "description_fr": "ceremonie annuel pour les suucces",
+    "description_ar": "حفلة سنوية للمتخرجين",
+    "color": "#3B82F6",
+    "created_at": "2026-03-13T13:58:30.928Z",
+    "updated_at": "2026-03-13T13:58:30.928Z"
+  }
+},
+{
+  "model": "news.news",
+  "pk": 1,
+  "fields": {
+    "title_fr": "sortoe",
+    "title_ar": "حفله التخرج",
+    "slug": "sortoe",
+    "summary_fr": "fete de suucces annuel de promo 2025",
+    "summary_ar": "حقلة سنوية للمتخرجين دورة 2025",
+    "content_fr": "Conceptual Steps\r\nFrontend build → React/Vite compiled into static files.\r\n\r\nBackend run → Django served by Gunicorn on an internal port.\r\n\r\nNginx config → Serves frontend, proxies API requests to Django.\r\n\r\nDatabase → SQLite file accessed directly by Django.",
+    "content_ar": "Conceptual Steps\r\nFrontend build → React/Vite compiled into static files.\r\n\r\nBackend run → Django served by Gunicorn on an internal port.\r\n\r\nNginx config → Serves frontend, proxies API requests to Django.\r\n\r\nDatabase → SQLite file accessed directly by Django.",
+    "category": 1,
+    "priority": "normal",
+    "status": "published",
+    "featured_image": "news/images/ent4.jpg",
+    "image_alt_fr": "promo 2025",
+    "image_alt_ar": "دورة 2025",
+    "published_at": "2025-12-12T10:00:00Z",
+    "event_date": "2026-12-09T09:00:00Z",
+    "featured": false,
+    "allow_comments": true,
+    "views_count": 15,
+    "meta_description_fr": "ecole national des transmission",
+    "meta_description_ar": "المدرسة الوطنية للمواصلات السلكية واللاسلكية",
+    "author": [
+      "imane"
+    ],
+    "created_at": "2026-03-13T14:00:16.527Z",
+    "updated_at": "2026-03-13T14:01:59.546Z"
+  }
+},
+{
+  "model": "news.newscomment",
+  "pk": 1,
+  "fields": {
+    "news": 1,
+    "author_name": "imane",
+    "author_email": "bimane040@gmail.com",
+    "content": "merci",
+    "status": "approved",
+    "created_at": "2026-03-13T23:21:41.639Z",
+    "updated_at": "2026-03-13T23:21:41.639Z"
+  }
+},
+{
+  "model": "library.bookcategory",
+  "pk": 1,
+  "fields": {
+    "name_fr": "informatique",
+    "name_ar": "إعلام الي",
+    "description_fr": "",
+    "description_ar": "",
+    "icon": "info",
+    "created_at": "2026-03-13T22:51:19.276Z",
+    "updated_at": "2026-03-13T22:51:19.276Z"
+  }
+},
+{
+  "model": "library.author",
+  "pk": 1,
+  "fields": {
+    "first_name": "mm bernard",
+    "last_name": "Bernard",
+    "bio_fr": "mm public",
+    "bio_ar": "",
+    "birth_date": null,
+    "death_date": null,
+    "nationality": "",
+    "photo": "",
+    "website": "http://www.coccinelle.com",
+    "created_at": "2026-03-13T22:50:39.886Z",
+    "updated_at": "2026-03-13T22:50:39.886Z"
+  }
+},
+{
+  "model": "library.publisher",
+  "pk": 1,
+  "fields": {
+    "name": "coccinel",
+    "address": "16 rue abdelkrim elagoun",
+    "website": "",
+    "email": "bimane040@gmail.com",
+    "phone": "0555751588",
+    "created_at": "2026-03-13T22:51:35.879Z",
+    "updated_at": "2026-03-13T22:51:35.879Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 1,
+  "fields": {
+    "title": "python",
+    "subtitle": "advanced",
+    "category": 1,
+    "publisher": 1,
+    "isbn": "1234567891298",
+    "publication_date": "2020-03-12",
+    "edition": "media",
+    "pages": 320,
+    "language": "en",
+    "description_fr": "python advanced",
+    "description_ar": "بايثون مستوى متقدم",
+    "summary_fr": "livre python destine au developeur niveauavanced",
+    "summary_ar": "كتاب بايثون موجه للمبرمجين مستوى متقدم",
+    "table_of_contents": "1.2.3..5.6.7.8.9",
+    "cover_image": "books/covers/auth.png",
+    "pdf_file": "books/pdfs/PFE.pdf",
+    "format_type": "physical",
+    "dimensions": "5",
+    "weight": "20.00",
+    "call_number": "droite",
+    "location": "8A",
+    "status": "available",
+    "copies_total": 1,
+    "copies_available": 1,
+    "keywords": "python,ent,ecole national,transmission",
+    "rating": "0.00",
+    "views_count": 7,
+    "download_count": 0,
+    "is_featured": false,
+    "is_new_arrival": false,
+    "allow_download": true,
+    "require_permission": false,
+    "added_by": [
+      "imane"
+    ],
+    "created_at": "2026-03-13T22:54:12.848Z",
+    "updated_at": "2026-03-13T22:54:12.848Z",
+    "authors": [
+      1
+    ]
+  }
+},
+{
+  "model": "users.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "ent"
+    ],
+    "user_type": "visitor",
+    "student_id": null,
+    "employee_id": null,
+    "phone": "",
+    "address": "",
+    "city": "",
+    "postal_code": "",
+    "country": "Algérie",
+    "birth_date": null,
+    "gender": "",
+    "nationality": "",
+    "department": "",
+    "specialization": "",
+    "academic_year": "",
+    "enrollment_date": null,
+    "avatar": "",
+    "preferred_language": "fr",
+    "receive_notifications": true,
+    "receive_newsletter": false,
+    "is_verified": false,
+    "is_active_student": true,
+    "created_at": "2026-03-13T13:49:15.742Z",
+    "updated_at": "2026-03-13T13:49:15.742Z"
+  }
+},
+{
+  "model": "users.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "zahra"
+    ],
+    "user_type": "student",
+    "student_id": "123654789",
+    "employee_id": "987456321",
+    "phone": "0555751588",
+    "address": "16 rue abdelkrim elagoun",
+    "city": "el mouradia",
+    "postal_code": "96162",
+    "country": "Algérie",
+    "birth_date": "2016-11-23",
+    "gender": "F",
+    "nationality": "algerienne",
+    "department": "AI",
+    "specialization": "detection Anomalie",
+    "academic_year": "2034",
+    "enrollment_date": "2026-03-14",
+    "avatar": "avatars/601409485_846343798238798_1047140791677694675_n.jpg",
+    "preferred_language": "fr",
+    "receive_notifications": true,
+    "receive_newsletter": false,
+    "is_verified": true,
+    "is_active_student": true,
+    "created_at": "2026-03-14T04:40:38.348Z",
+    "updated_at": "2026-03-14T04:48:34.881Z"
+  }
+},
+{
+  "model": "users.useractivity",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "zahra"
+    ],
+    "action": "login",
+    "description": "Connexion utilisateur",
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0",
+    "content_type": "",
+    "object_id": null,
+    "created_at": "2026-03-14T04:50:28.242Z"
+  }
+},
+{
+  "model": "users.useractivity",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "action": "login",
+    "description": "Connexion utilisateur",
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0",
+    "content_type": "",
+    "object_id": null,
+    "created_at": "2026-03-14T05:03:31.892Z"
+  }
+},
+{
+  "model": "users.useractivity",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "action": "login",
+    "description": "Connexion depuis Ordinateur",
+    "ip_address": null,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0",
+    "content_type": "",
+    "object_id": null,
+    "created_at": "2026-03-16T13:00:04.218Z"
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "title": "👋 Nouvelle inscription: ecole national",
+    "message": "L'utilisateur ecole national (bimane@gmail.com) vient de s'inscrire sur la plateforme.",
+    "notification_type": "info",
+    "link_url": "/admin/users/adminusermessage/1/change/",
+    "link_text": "Envoyer un message de bienvenue",
+    "is_read": false,
+    "is_important": true,
+    "created_at": "2026-03-13T13:49:15.751Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "ent"
+    ],
+    "title": "👋 Nouvelle inscription: ecole national",
+    "message": "L'utilisateur ecole national (bimane@gmail.com) vient de s'inscrire sur la plateforme.",
+    "notification_type": "info",
+    "link_url": "/admin/users/adminusermessage/1/change/",
+    "link_text": "Envoyer un message de bienvenue",
+    "is_read": false,
+    "is_important": true,
+    "created_at": "2026-03-13T13:49:15.751Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "title": "🔔 Nouvelle connexion: benmoussa imane",
+    "message": "L'utilisateur benmoussa imane vient de se connecter depuis Ordinateur (IP: 127.0.0.1)",
+    "notification_type": "system",
+    "link_url": "/admin/users/adminusermessage/2/change/",
+    "link_text": "Voir les détails et répondre",
+    "is_read": false,
+    "is_important": false,
+    "created_at": "2026-03-13T13:53:16.864Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "ent"
+    ],
+    "title": "🔔 Nouvelle connexion: benmoussa imane",
+    "message": "L'utilisateur benmoussa imane vient de se connecter depuis Ordinateur (IP: 127.0.0.1)",
+    "notification_type": "system",
+    "link_url": "/admin/users/adminusermessage/2/change/",
+    "link_text": "Voir les détails et répondre",
+    "is_read": false,
+    "is_important": false,
+    "created_at": "2026-03-13T13:53:16.870Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "title": "🎉 Bienvenue sur l'ENT !",
+    "message": "Bienvenue sur la plateforme de l'École Nationale des Transmissions !\n\nVous pouvez maintenant:\n• Consulter les cours et formations\n• Accéder à la bibliothèque numérique  \n• Suivre les actualités de l'école\n• Gérer votre profil\n\nSi vous avez des questions, n'hésitez pas à contacter l'administration.",
+    "notification_type": "success",
+    "link_url": "/profile/",
+    "link_text": "Compléter mon profil",
+    "is_read": false,
+    "is_important": true,
+    "created_at": "2026-03-13T13:53:16.873Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "title": "👋 Nouvelle inscription: زهرة ايت مقيدش",
+    "message": "L'utilisateur زهرة ايت مقيدش (zahra.aitmekideche@gmail.com) vient de s'inscrire sur la plateforme.",
+    "notification_type": "info",
+    "link_url": "/admin/users/adminusermessage/3/change/",
+    "link_text": "Envoyer un message de bienvenue",
+    "is_read": false,
+    "is_important": true,
+    "created_at": "2026-03-14T04:40:38.357Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "ent"
+    ],
+    "title": "👋 Nouvelle inscription: زهرة ايت مقيدش",
+    "message": "L'utilisateur زهرة ايت مقيدش (zahra.aitmekideche@gmail.com) vient de s'inscrire sur la plateforme.",
+    "notification_type": "info",
+    "link_url": "/admin/users/adminusermessage/3/change/",
+    "link_text": "Envoyer un message de bienvenue",
+    "is_read": false,
+    "is_important": true,
+    "created_at": "2026-03-14T04:40:38.357Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "title": "🔔 Nouvelle connexion: benmoussa imane",
+    "message": "L'utilisateur benmoussa imane vient de se connecter depuis Ordinateur (IP: )",
+    "notification_type": "system",
+    "link_url": "/admin/users/adminusermessage/4/change/",
+    "link_text": "Voir les détails et répondre",
+    "is_read": false,
+    "is_important": false,
+    "created_at": "2026-03-16T13:00:04.223Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "ent"
+    ],
+    "title": "🔔 Nouvelle connexion: benmoussa imane",
+    "message": "L'utilisateur benmoussa imane vient de se connecter depuis Ordinateur (IP: )",
+    "notification_type": "system",
+    "link_url": "/admin/users/adminusermessage/4/change/",
+    "link_text": "Voir les détails et répondre",
+    "is_read": false,
+    "is_important": false,
+    "created_at": "2026-03-16T13:00:04.225Z",
+    "read_at": null,
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usersession",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "session_key": "api_session",
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0",
+    "device_info": "",
+    "location": "",
+    "is_active": true,
+    "last_activity": "2026-03-14T05:03:31.909Z",
+    "created_at": "2026-03-13T22:49:21.406Z"
+  }
+},
+{
+  "model": "users.adminusermessage",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "ent"
+    ],
+    "admin": null,
+    "message_type": "user_message",
+    "subject": "Nouvelle inscription: ecole national",
+    "message": "Nouvel utilisateur inscrit sur la plateforme:\n\n👤 Nom complet: ecole national\n📧 Email: bimane@gmail.com\n👤 Nom d'utilisateur: ent\n📅 Date d'inscription: 13/03/2026 à 13:49\n\nProfil utilisateur créé automatiquement.\nVous pouvez envoyer un message de bienvenue à ce nouvel utilisateur.",
+    "admin_response": "",
+    "status": "pending",
+    "is_urgent": false,
+    "login_ip": null,
+    "login_device": "",
+    "login_location": "",
+    "created_at": "2026-03-13T13:49:15.742Z",
+    "responded_at": null,
+    "updated_at": "2026-03-13T13:49:15.742Z"
+  }
+},
+{
+  "model": "users.adminusermessage",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "admin": null,
+    "message_type": "login_notification",
+    "subject": "Nouvelle connexion: benmoussa imane",
+    "message": "Nouvel utilisateur connecté:\n\n👤 Utilisateur: benmoussa imane (imane)\n📧 Email: bimane040@gmail.com\n🌐 Adresse IP: 127.0.0.1\n📱 Appareil: Ordinateur\n🕒 Heure: 13/03/2026 à 13:53\n\nType d'utilisateur: Non défini",
+    "admin_response": "",
+    "status": "pending",
+    "is_urgent": false,
+    "login_ip": "127.0.0.1",
+    "login_device": "Ordinateur",
+    "login_location": "",
+    "created_at": "2026-03-13T13:53:16.858Z",
+    "responded_at": null,
+    "updated_at": "2026-03-13T13:53:16.858Z"
+  }
+},
+{
+  "model": "users.adminusermessage",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "zahra"
+    ],
+    "admin": null,
+    "message_type": "user_message",
+    "subject": "Nouvelle inscription: زهرة ايت مقيدش",
+    "message": "Nouvel utilisateur inscrit sur la plateforme:\n\n👤 Nom complet: زهرة ايت مقيدش\n📧 Email: zahra.aitmekideche@gmail.com\n👤 Nom d'utilisateur: zahra\n📅 Date d'inscription: 14/03/2026 à 04:40\n\nProfil utilisateur créé automatiquement.\nVous pouvez envoyer un message de bienvenue à ce nouvel utilisateur.",
+    "admin_response": "",
+    "status": "pending",
+    "is_urgent": false,
+    "login_ip": null,
+    "login_device": "",
+    "login_location": "",
+    "created_at": "2026-03-14T04:40:38.348Z",
+    "responded_at": null,
+    "updated_at": "2026-03-14T04:40:38.348Z"
+  }
+},
+{
+  "model": "users.adminusermessage",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "admin": null,
+    "message_type": "login_notification",
+    "subject": "Nouvelle connexion: benmoussa imane",
+    "message": "Nouvel utilisateur connecté:\n\n👤 Utilisateur: benmoussa imane (imane)\n📧 Email: bimane040@gmail.com\n🌐 Adresse IP: \n📱 Appareil: Ordinateur\n🕒 Heure: 16/03/2026 à 13:00\n\nType d'utilisateur: Non défini",
+    "admin_response": "",
+    "status": "pending",
+    "is_urgent": false,
+    "login_ip": null,
+    "login_device": "Ordinateur",
+    "login_location": "",
+    "created_at": "2026-03-16T13:00:04.221Z",
+    "responded_at": null,
+    "updated_at": "2026-03-16T13:00:04.221Z"
+  }
+},
+{
+  "model": "users.emailtemplate",
+  "pk": 1,
+  "fields": {
+    "name": "imane",
+    "template_type": "welcome",
+    "subject": "inscription",
+    "html_content": "<p>bien venu</p>",
+    "text_content": "",
+    "available_variables": "",
+    "is_active": true,
+    "created_at": "2026-03-13T23:16:02.095Z",
+    "updated_at": "2026-03-13T23:16:02.095Z"
+  }
+},
+{
+  "model": "users.emaillog",
+  "pk": 1,
+  "fields": {
+    "template": 1,
+    "recipient_email": "zahra.aitmekideche@gmail.com",
+    "recipient_user": [
+      "zahra"
+    ],
+    "subject": "inscription",
+    "html_content": "<p>bien venu</p>",
+    "text_content": "bien venu",
+    "status": "sent",
+    "error_message": "",
+    "sent_at": "2026-03-14T04:40:38.407Z",
+    "created_at": "2026-03-14T04:40:38.388Z",
+    "opened_at": null,
+    "clicked_at": null
+  }
+},
+{
+  "model": "events.eventcategory",
+  "pk": 1,
+  "fields": {
+    "name_fr": "graduation",
+    "name_ar": "تخرج",
+    "description_fr": "",
+    "description_ar": "",
+    "color": "#007bff",
+    "icon": "fas fa-calendar",
+    "is_active": true,
+    "created_at": "2026-03-13T22:24:57.437Z",
+    "updated_at": "2026-03-13T22:37:06.838Z"
+  }
+},
+{
+  "model": "events.eventcategory",
+  "pk": 2,
+  "fields": {
+    "name_fr": "conférences",
+    "name_ar": "مؤتمر",
+    "description_fr": "",
+    "description_ar": "",
+    "color": "#007bff",
+    "icon": "fas fa-calendar",
+    "is_active": true,
+    "created_at": "2026-03-13T22:33:12.686Z",
+    "updated_at": "2026-03-13T22:37:40.779Z"
+  }
+},
+{
+  "model": "events.eventcategory",
+  "pk": 3,
+  "fields": {
+    "name_fr": "Ateliers",
+    "name_ar": "ورش العمل",
+    "description_fr": "",
+    "description_ar": "",
+    "color": "#007bff",
+    "icon": "fas fa-calendar",
+    "is_active": true,
+    "created_at": "2026-03-13T22:39:31.111Z",
+    "updated_at": "2026-03-13T22:39:31.114Z"
+  }
+},
+{
+  "model": "events.eventcategory",
+  "pk": 4,
+  "fields": {
+    "name_fr": "compétitions",
+    "name_ar": "المسابقات",
+    "description_fr": "",
+    "description_ar": "",
+    "color": "#007bff",
+    "icon": "fas fa-calendar",
+    "is_active": true,
+    "created_at": "2026-03-13T22:40:19.933Z",
+    "updated_at": "2026-03-13T22:40:19.933Z"
+  }
+},
+{
+  "model": "events.eventcategory",
+  "pk": 5,
+  "fields": {
+    "name_fr": "événements culturels",
+    "name_ar": "الأحداث الثقافية",
+    "description_fr": "",
+    "description_ar": "",
+    "color": "#007bff",
+    "icon": "fas fa-calendar",
+    "is_active": true,
+    "created_at": "2026-03-13T22:41:48.549Z",
+    "updated_at": "2026-03-13T22:41:48.549Z"
+  }
+},
+{
+  "model": "events.eventcategory",
+  "pk": 6,
+  "fields": {
+    "name_fr": "Événements sportifs",
+    "name_ar": "الأحداث الرياضية",
+    "description_fr": "",
+    "description_ar": "",
+    "color": "#007bff",
+    "icon": "fas fa-calendar",
+    "is_active": true,
+    "created_at": "2026-03-13T22:42:22.779Z",
+    "updated_at": "2026-03-13T22:42:22.779Z"
+  }
+},
+{
+  "model": "events.eventcategory",
+  "pk": 7,
+  "fields": {
+    "name_fr": "Séminaires",
+    "name_ar": "الندوات",
+    "description_fr": "",
+    "description_ar": "",
+    "color": "#007bff",
+    "icon": "fas fa-calendar",
+    "is_active": true,
+    "created_at": "2026-03-13T22:42:51.690Z",
+    "updated_at": "2026-03-13T22:42:51.690Z"
+  }
+},
+{
+  "model": "events.event",
+  "pk": 1,
+  "fields": {
+    "title_fr": "remise de diplome",
+    "title_ar": "حفلة تسليم الشهادات",
+    "slug": "remise-de-diplome",
+    "description_fr": "ceremonie remise de diplome",
+    "description_ar": "حفلة تسليمالشهادات دورة 2025",
+    "category": 1,
+    "start_date": "2026-03-13T22:25:33Z",
+    "end_date": "2026-03-12T23:25:37Z",
+    "registration_deadline": null,
+    "location": "Ecole National des Transmission",
+    "address": "16 rue hales said el mouradia alger",
+    "room": "Conference",
+    "max_participants": null,
+    "registration_required": false,
+    "registration_fee": "0.00",
+    "status": "published",
+    "priority": "normal",
+    "image": "events/images/601351164_846344431572068_1424143745320133264_n.jpg",
+    "attachment": "",
+    "organizer": [
+      "ent"
+    ],
+    "created_by": [
+      "imane"
+    ],
+    "is_featured": false,
+    "is_public": true,
+    "views_count": 0,
+    "created_at": "2026-03-13T22:27:13.313Z",
+    "updated_at": "2026-03-13T22:27:13.313Z",
+    "published_at": "2026-03-13T22:27:13.313Z"
+  }
+},
+{
+  "model": "events.event",
+  "pk": 2,
+  "fields": {
+    "title_fr": "conference",
+    "title_ar": "مؤتمر",
+    "slug": "conference",
+    "description_fr": "conference de hakathon",
+    "description_ar": "مؤتمر الهاكاتون",
+    "category": 2,
+    "start_date": "2026-03-13T22:33:44Z",
+    "end_date": "2026-03-12T23:33:46Z",
+    "registration_deadline": null,
+    "location": "Ecole National des Transmission",
+    "address": "16 rue hales said el mouradia",
+    "room": "Conference",
+    "max_participants": null,
+    "registration_required": false,
+    "registration_fee": "0.00",
+    "status": "published",
+    "priority": "normal",
+    "image": "events/images/students.jpg",
+    "attachment": "",
+    "organizer": [
+      "ent"
+    ],
+    "created_by": [
+      "imane"
+    ],
+    "is_featured": false,
+    "is_public": true,
+    "views_count": 0,
+    "created_at": "2026-03-13T22:34:38.722Z",
+    "updated_at": "2026-03-13T22:34:38.722Z",
+    "published_at": "2026-03-13T22:34:38.722Z"
+  }
+},
+{
+  "model": "events.event",
+  "pk": 3,
+  "fields": {
+    "title_fr": "Atelier cisco",
+    "title_ar": "مختبر سيسكو",
+    "slug": "atelier-cisco",
+    "description_fr": "atelier cisco pour les technicien specialiser",
+    "description_ar": "مختبر سيسكو للتقنيين الخاصين",
+    "category": 3,
+    "start_date": "2026-03-13T22:44:13Z",
+    "end_date": "2026-03-14T22:44:21Z",
+    "registration_deadline": null,
+    "location": "Ecole National des Transmission",
+    "address": "",
+    "room": "108",
+    "max_participants": null,
+    "registration_required": false,
+    "registration_fee": "0.00",
+    "status": "published",
+    "priority": "normal",
+    "image": "events/images/Capture_décran_2026-03-12_120059.png",
+    "attachment": "",
+    "organizer": [
+      "ent"
+    ],
+    "created_by": [
+      "imane"
+    ],
+    "is_featured": false,
+    "is_public": true,
+    "views_count": 0,
+    "created_at": "2026-03-13T22:45:15.769Z",
+    "updated_at": "2026-03-13T22:45:15.769Z",
+    "published_at": "2026-03-13T22:45:15.765Z"
+  }
+},
+{
+  "model": "alumni_success.alumnisuccess",
+  "pk": 1,
+  "fields": {
+    "name_fr": "succes alumni",
+    "name_ar": "تخرج المتربصين",
+    "name_en": "promo 2025",
+    "title_fr": "succes",
+    "title_ar": "نجاح",
+    "title_en": "success",
+    "story_fr": "parcours azerty dfghj rtyui",
+    "story_ar": "قصة نجاح بهده المناسبة السعيدة",
+    "story_en": "the story of success",
+    "photo": "alumni/photos/1772350643389.jpg",
+    "created_at": "2026-03-13T22:30:33.888Z",
+    "updated_at": "2026-03-13T23:25:31.507Z"
+  }
+},
+{
+  "model": "alumni_success.alumniphoto",
+  "pk": 1,
+  "fields": {
+    "alumni": 1,
+    "image": "alumni/gallery/students.jpg",
+    "legend_fr": "Promotion 2025 : Pionniers de la Connectivité et de l'Innovation",
+    "legend_ar": "دفعة 2025: ريادة، ابتكار، واتصال",
+    "legend_en": "Class of 2025: Engineering the Connections of Tomorrow",
+    "uploaded_at": "2026-03-13T22:30:33.894Z"
+  }
+},
+{
+  "model": "alumni_success.alumniphoto",
+  "pk": 2,
+  "fields": {
+    "alumni": 1,
+    "image": "alumni/gallery/ent4.jpg",
+    "legend_fr": null,
+    "legend_ar": null,
+    "legend_en": null,
+    "uploaded_at": "2026-03-13T22:30:33.900Z"
+  }
+},
+{
+  "model": "alumni_success.alumniphoto",
+  "pk": 3,
+  "fields": {
+    "alumni": 1,
+    "image": "alumni/gallery/601351164_846344431572068_1424143745320133264_n.jpg",
+    "legend_fr": null,
+    "legend_ar": null,
+    "legend_en": null,
+    "uploaded_at": "2026-03-13T22:30:33.903Z"
+  }
+},
+{
+  "model": "alumni_success.alumniphoto",
+  "pk": 4,
+  "fields": {
+    "alumni": 1,
+    "image": "alumni/gallery/1772350643389.jpg",
+    "legend_fr": null,
+    "legend_ar": null,
+    "legend_en": null,
+    "uploaded_at": "2026-03-13T22:30:33.907Z"
+  }
+},
+{
+  "model": "alumni_success.alumniphoto",
+  "pk": 5,
+  "fields": {
+    "alumni": 1,
+    "image": "alumni/gallery/ent5_125SjUp.jpg",
+    "legend_fr": null,
+    "legend_ar": null,
+    "legend_en": null,
+    "uploaded_at": "2026-03-13T22:30:33.912Z"
+  }
+},
+{
+  "model": "banner.banner",
+  "pk": 1,
+  "fields": {
+    "text1_fr": "REPUBLIQUE ALGERIENNE DEMOCRATIQUE ET POPULAIRE",
+    "text1_en": "REPUBLIQUE ALGERIENNE DEMOCRATIQUE ET POPULAIRE",
+    "text1_ar": "الجمهوريــة الجزائريـــة الديمقراطيـــة الشعبيــــــة",
+    "text2_fr": "MINISTERE DE L’INTERIEUR, DES COLLECTIVITES LOCALES ET DES TRANSPORTS",
+    "text2_en": "MINISTERE DE L’INTERIEUR, DES COLLECTIVITES LOCALES ET DES TRANSPORTS",
+    "text2_ar": "وزارة الداخليــة و الجماعـــات المحليــة و النقــــل",
+    "text3_fr": "Ecole National des Transmissions",
+    "text3_en": "School of Transmissions",
+    "text3_ar": "المدرسة الوطنية للمواصلات السلكية واللاسلكية",
+    "image_left": "banner/OIP_1.webp",
+    "image_right": "banner/logoent_ahVOCA4.jpg",
+    "is_active": true
+  }
+},
+{
+  "model": "team.teammember",
+  "pk": 1,
+  "fields": {
+    "name_fr": "Prefesseur",
+    "name_ar": "أستاذة",
+    "name_en": "lectures",
+    "role_fr": "Developement et securite des applicatifs",
+    "role_ar": "تطوير وتأمين التطبيقات",
+    "role_en": "developement and security",
+    "bio_fr": "Inspecteur Technique Specialise Principal",
+    "bio_ar": "مفتش تقني متخصص رءيسي",
+    "bio_en": "Inspector Specialized Principal",
+    "photo": "team_photos/601369088_846344644905380_5981767359152167643_n.jpg",
+    "linkedin": null,
+    "email": "imane.ben-moussa@ent-dz.com",
+    "order": 0
+  }
+},
+{
+  "model": "team.director",
+  "pk": 1,
+  "fields": {
+    "name_fr": "Bediar",
+    "name_ar": "بديار",
+    "name_en": "Bediar",
+    "message_fr": "je serai tres satisfait",
+    "message_ar": "انا جد رض على ما",
+    "message_en": "Its so interesting to",
+    "start_year": 2025,
+    "end_year": null,
+    "photo": "directors/sports.jpg",
+    "is_current": true,
+    "order": 0
+  }
+},
+{
+  "model": "ohb_formation.formationcategory",
+  "pk": 1,
+  "fields": {
+    "name_fr": "Reseaux",
+    "name_ar": "شبكات",
+    "description_fr": "",
+    "description_ar": "",
+    "icon": "network",
+    "created_at": "2026-03-16T07:34:32.290Z",
+    "updated_at": "2026-03-16T07:34:32.290Z"
+  }
+},
+{
+  "model": "ohb_formation.formationcategory",
+  "pk": 2,
+  "fields": {
+    "name_fr": "informatique",
+    "name_ar": "إعلام الي",
+    "description_fr": "",
+    "description_ar": "",
+    "icon": "info",
+    "created_at": "2026-03-16T07:35:20.628Z",
+    "updated_at": "2026-03-16T07:35:20.628Z"
+  }
+},
+{
+  "model": "ohb_formation.formation",
+  "pk": 1,
+  "fields": {
+    "title_fr": "Security des applicatifs",
+    "title_ar": "تأمين التطبيقات",
+    "label": "Bootcamp",
+    "slug": "security-des-applicatifs",
+    "description_fr": "qesf",
+    "description_ar": "التعليم",
+    "content_fr": "zre zer zer zerrrr azre sdfg E GTRH",
+    "content_ar": "qsf erg rg gstg gesrg erg g",
+    "objectives_fr": "sdg\r\ngzerg\r\nerg\r\nnh\r\n\r\nytik\r\nér\r\nyt",
+    "objectives_ar": "zg\r\n\r\nj\r\nj\r\nrty\r\ngh\r\ns",
+    "prerequisites_fr": "ert\r\nert\r\nert",
+    "prerequisites_ar": "f\r\nrzty\r\nztry\r\nztry\r\nzer\r\ntzert",
+    "target_audience_fr": "zet\r\nsdg\r\nfh\r\nt\r\nzert\r\nq\r\ne\r\nyh",
+    "target_audience_ar": "zeryt\r\nzry\r\nz\r\nzert",
+    "location_fr": "En présentiel, à l’école Nationale des  Transmissions",
+    "location_ar": "المدرسة الوطنية للمواصلات السلكية واللاسلكية",
+    "teaching_methods_fr": "sqdg\r\nqsd",
+    "teaching_methods_ar": "لسيبل\r\nيشل\r\nشسل",
+    "daily_organization_fr": "1.qsdf\r\n2.sqdf",
+    "daily_organization_ar": "1SF\r\n.2.sfd",
+    "daily_program_fr": "1sqdf",
+    "daily_program_ar": "1.التمهين",
+    "category": 2,
+    "level": "intermediate",
+    "duration_weeks": 1,
+    "duration_hours": 10,
+    "max_students": 20,
+    "image": "ohb_formations/images/Capture_décran_2026-03-03_133152.png",
+    "pdf_file": "ohb_formations/pdfs/Sequence_AmourDeTortue.pdf",
+    "brochure_pdf": "ohb_formations/brochures/Coccinelle_CM1-Evaluations_BPBAT.pdf",
+    "is_free": false,
+    "registration_open": false,
+    "start_date": null,
+    "end_date": null,
+    "status": "published",
+    "featured": false,
+    "views_count": 12,
+    "created_at": "2026-03-16T07:44:36.074Z",
+    "updated_at": "2026-03-16T07:44:36.074Z",
+    "created_by": null
+  }
+},
+{
+  "model": "authtoken.token",
+  "pk": "915875ec6c6da9bf36cbd50166bb191b8059959b",
+  "fields": {
+    "user": [
+      "imane"
+    ],
+    "created": "2026-03-13T22:49:21.389Z"
+  }
+},
+{
+  "model": "authtoken.token",
+  "pk": "f3c76cd9dba91f0a2a8e2275b434de7b354ace9f",
+  "fields": {
+    "user": [
+      "zahra"
+    ],
+    "created": "2026-03-14T04:40:38.373Z"
+  }
+}
+]

@@ -1,0 +1,241 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Gestion des Formations OHB - ENT{% endblock %}
+
+{% block extra_css %}
+<style>
+    .content-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .formation-card {
+        transition: all 0.3s ease;
+    }
+    
+    .formation-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .badge-ohb {
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="fas fa-graduation-cap me-2 text-orange"></i>Gestion des Formations OHB</h2>
+            <p class="text-muted">Gérer les formations OHB (Organisme de Formation)</p>
+        </div>
+        <div>
+            <a href="{% url 'formation_add' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Nouvelle Formation
+            </a>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Filtres -->
+    <div class="content-card mb-4">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Recherche</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-2 border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-2 border-start-0 shadow-sm" 
+                           placeholder="Titre, description..." value="{{ current_filters.search }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Catégorie</label>
+                <select name="category" class="form-select border-2 shadow-sm">
+                    <option value="">Toutes les catégories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if current_filters.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                        {{ cat.name_fr }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Statut</label>
+                <select name="status" class="form-select border-2 shadow-sm">
+                    <option value="">Tous les statuts</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <div class="d-grid w-100">
+                    <button type="submit" class="btn btn-primary shadow-sm">
+                        <i class="fas fa-filter me-2"></i>Filtrer
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <div class="d-grid w-100">
+                    <a href="{% url 'formation_management' %}" class="btn btn-outline-secondary shadow-sm">
+                        <i class="fas fa-times me-2"></i>Réinitialiser
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Liste des Formations - Cartes Modernes -->
+    <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="m-0"><i class="fas fa-list me-2 text-orange"></i>Liste des Formations OHB</h5>
+            <span class="badge bg-orange fs-6 px-3 py-2">{{ formations.paginator.count }} formations</span>
+        </div>
+
+        {% if formations %}
+        <div class="row g-4">
+            {% for formation in formations %}
+            <div class="col-md-6 col-lg-4">
+                <div class="formation-card card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        {% if formation.image %}
+                        <img src="{{ formation.image.url }}" alt="Image" class="card-img-top" style="height: 160px; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-gradient-orange d-flex align-items-center justify-content-center" style="height: 160px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">
+                            <i class="fas fa-graduation-cap fa-4x text-white opacity-50"></i>
+                        </div>
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 p-2">
+                            {% if formation.featured %}
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-star me-1"></i>Featured
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="position-absolute bottom-0 start-0 p-2">
+                            <span class="badge bg-{% if formation.status == 'published' %}success{% elif formation.status == 'draft' %}warning{% else %}secondary{% endif %}">
+                                {{ formation.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-truncate mb-2">{{ formation.title_fr }}</h5>
+                        <p class="card-text text-muted small mb-3">{{ formation.description_fr|truncatechars:80 }}</p>
+                        
+                        <div class="d-flex flex-wrap gap-1 mb-3">
+                            <span class="badge badge-ohb">
+                                <i class="fas fa-folder me-1"></i>{{ formation.category.name_fr|default:"Non classé" }}
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center text-muted small">
+                            <span><i class="fas fa-clock me-1"></i>{{ formation.duration_weeks }} sem</span>
+                            <span><i class="fas fa-calendar me-1"></i>{{ formation.created_at|date:"d/m/y" }}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <div class="d-flex gap-2">
+                            <a href="/admin/ohb_formation/formation/{{ formation.id }}/change/" class="btn btn-sm btn-outline-warning flex-fill" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-sm btn-outline-danger flex-fill" title="Supprimer"
+                                onclick="confirmDeleteFormation('{{ formation.title_fr|escapejs }}', '{{ formation.id }}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="mb-3">
+                <i class="fas fa-graduation-cap fa-5x text-muted opacity-25"></i>
+            </div>
+            <h5 class="text-muted">Aucune formation OHB trouvée</h5>
+            <p class="text-muted">Essayez de modifier vos critères de recherche ou ajoutez une nouvelle formation.</p>
+            <a href="{% url 'formation_add' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Ajouter une formation
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Pagination Moderne -->
+        {% if formations.has_other_pages %}
+        <nav aria-label="Pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if formations.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ formations.previous_page_number }}{% if current_filters.search %}&search={{ current_filters.search }}{% endif %}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.status %}&status={{ current_filters.status }}{% endif %}">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                </li>
+                {% endif %}
+                
+                {% for num in formations.paginator.page_range %}
+                    {% if formations.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > formations.number|add:'-3' and num < formations.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if current_filters.search %}&search={{ current_filters.search }}{% endif %}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.status %}&status={{ current_filters.status }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if formations.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ formations.next_page_number }}{% if current_filters.search %}&search={{ current_filters.search }}{% endif %}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.status %}&status={{ current_filters.status }}{% endif %}">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function confirmDeleteFormation(formationName, formationId) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer la formation "${formationName}" ?`)) {
+        // Redirect to delete view
+        window.location.href = `/admin/ohb_formation/formation/${formationId}/delete/`;
+    }
+}
+</script>
+{% endblock %}

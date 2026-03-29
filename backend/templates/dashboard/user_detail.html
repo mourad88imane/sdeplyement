@@ -1,0 +1,247 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ user.get_full_name|default:user.username }} - Détails Utilisateur{% endblock %}
+{% block page_title %}Détails Utilisateur{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Informations Principales -->
+    <div class="col-md-8">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5><i class="fas fa-user me-2"></i>Informations Utilisateur</h5>
+                <div>
+                    <a href="{% url 'users_management' %}" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                    <a href="/admin/auth/user/{{ user.id }}/change/" class="btn btn-primary">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                </div>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Prénom</label>
+                            <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Nom</label>
+                            <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ user.email }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Nom d'utilisateur</label>
+                            <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Type d'utilisateur</label>
+                            <select name="user_type" class="form-select">
+                                {% for value, label in user_types %}
+                                    <option value="{{ value }}" {% if profile.user_type == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Téléphone</label>
+                            <input type="text" name="phone" class="form-control" value="{{ profile.phone }}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Adresse</label>
+                    <textarea name="address" class="form-control" rows="2">{{ profile.address }}</textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Ville</label>
+                            <input type="text" name="city" class="form-control" value="{{ profile.city }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Département</label>
+                            <input type="text" name="department" class="form-control" value="{{ profile.department }}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Spécialisation</label>
+                            <input type="text" name="specialization" class="form-control" value="{{ profile.specialization }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div class="form-check mt-4">
+                                <input type="checkbox" name="is_active" class="form-check-input" {% if user.is_active %}checked{% endif %}>
+                                <label class="form-check-label">Compte actif</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer les modifications
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Activités Récentes -->
+        <div class="content-card">
+            <h5><i class="fas fa-history me-2"></i>Activités Récentes</h5>
+            
+            {% if recent_activities %}
+                <div class="list-group list-group-flush">
+                    {% for activity in recent_activities %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-{% if activity.action == 'login' %}sign-in-alt text-success{% elif activity.action == 'logout' %}sign-out-alt text-warning{% elif activity.action == 'view_course' %}eye text-info{% elif activity.action == 'enroll_course' %}graduation-cap text-primary{% else %}circle text-secondary{% endif %} me-2"></i>
+                            <strong>{{ activity.get_action_display }}</strong>
+                            {% if activity.description %}
+                                <br><small class="text-muted">{{ activity.description }}</small>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">{{ activity.timestamp|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Aucune activité récente enregistrée.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Sidebar avec Informations Supplémentaires -->
+    <div class="col-md-4">
+        <!-- Profil -->
+        <div class="content-card text-center">
+            <div class="mb-3">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="Avatar" class="rounded-circle" width="100" height="100">
+                {% else %}
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px; font-size: 2rem;">
+                        {{ user.first_name|first|default:user.username|first|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <h5>{{ user.get_full_name|default:user.username }}</h5>
+            <p class="text-muted">@{{ user.username }}</p>
+            <span class="badge bg-{% if profile.user_type == 'admin' %}danger{% elif profile.user_type == 'teacher' %}warning{% elif profile.user_type == 'student' %}info{% else %}secondary{% endif %} mb-3">
+                {{ profile.get_user_type_display }}
+            </span>
+        </div>
+        
+        <!-- Informations Système -->
+        <div class="content-card">
+            <h6><i class="fas fa-info-circle me-2"></i>Informations Système</h6>
+            <table class="table table-sm">
+                <tr>
+                    <td><strong>ID:</strong></td>
+                    <td>{{ user.id }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Inscription:</strong></td>
+                    <td>{{ user.date_joined|date:"d/m/Y H:i" }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Dernière connexion:</strong></td>
+                    <td>{{ user.last_login|date:"d/m/Y H:i"|default:"Jamais" }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Statut:</strong></td>
+                    <td>
+                        {% if user.is_active %}
+                            <span class="badge bg-success">Actif</span>
+                        {% else %}
+                            <span class="badge bg-danger">Inactif</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Staff:</strong></td>
+                    <td>
+                        {% if user.is_staff %}
+                            <span class="badge bg-warning">Oui</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Non</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Superuser:</strong></td>
+                    <td>
+                        {% if user.is_superuser %}
+                            <span class="badge bg-danger">Oui</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Non</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Actions Rapides -->
+        <div class="content-card">
+            <h6><i class="fas fa-bolt me-2"></i>Actions Rapides</h6>
+            <div class="d-grid gap-2">
+                <a href="/admin/auth/user/{{ user.id }}/password/" class="btn btn-outline-warning btn-sm">
+                    <i class="fas fa-key me-2"></i>Changer mot de passe
+                </a>
+                <a href="mailto:{{ user.email }}" class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-envelope me-2"></i>Envoyer email
+                </a>
+                {% if not user.is_superuser %}
+                <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete()">
+                    <i class="fas fa-trash me-2"></i>Supprimer utilisateur
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmDelete() {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "{{ user.get_full_name|default:user.username }}" ?`)) {
+        window.location.href = `/admin/auth/user/{{ user.id }}/delete/`;
+    }
+}
+</script>
+{% endblock %}

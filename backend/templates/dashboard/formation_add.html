@@ -1,0 +1,238 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Ajouter une Formation OHB - ENT{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .form-section h5 {
+        color: #1e3a5f;
+        border-bottom: 3px solid #f59e0b;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .required-field {
+        color: #ef4444;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 0.2rem rgba(245, 158, 11, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+    
+    .btn-secondary {
+        background: #6b7280;
+        border: none;
+        padding: 0.75rem 2rem;
+    }
+    
+    .image-preview {
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 2px dashed #f59e0b;
+    }
+    
+    .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="fas fa-graduation-cap me-2" style="color: #f59e0b;"></i>Ajouter une Formation OHB</h2>
+            <p class="text-muted">Créer une nouvelle formation pour les Occupations des Bureaux (OHB)</p>
+        </div>
+        <div>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+            </a>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- 1. Image de la Formation -->
+        <div class="form-section">
+            <h5><i class="fas fa-image me-2"></i>Image de la Formation</h5>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="image-preview" id="imagePreview">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-cloud-upload-alt fa-3x mb-2"></i>
+                            <p>Cliquez pour télécharger une image</p>
+                        </div>
+                    </div>
+                    <input type="file" class="form-control mt-3" id="image" name="image" accept="image/*" onchange="previewImage(this)">
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted small">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Formats recommandés: JPG, PNG<br>
+                        Taille optimale: 800x600 pixels<br>
+                        L'image sera affichée sur la page OHB
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Nom de la Formation (3 langues) -->
+        <div class="form-section">
+            <h5><i class="fas fa-heading me-2"></i>Nom de la Formation</h5>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="title_fr" class="form-label fw-semibold">
+                        Français <span class="required-field">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="title_fr" name="title_fr" 
+                           placeholder="Nom de la formation en français" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="title_ar" class="form-label fw-semibold">
+                        العربية
+                    </label>
+                    <input type="text" class="form-control" id="title_ar" name="title_ar" 
+                           placeholder="اسم الدورة بالعربية" dir="rtl">
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Catégorie -->
+        <div class="form-section">
+            <h5><i class="fas fa-folder me-2"></i>Catégorie de la Formation</h5>
+            
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label for="category" class="form-label fw-semibold">Sélectionner la catégorie <span class="required-field">*</span></label>
+                    <select class="form-select form-select-lg" id="category" name="category" required>
+                        <option value="">-- Choisir une catégorie --</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name_fr }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Description -->
+        <div class="form-section">
+            <h5><i class="fas fa-align-left me-2"></i>Description</h5>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="description_fr" class="form-label fw-semibold">Description (Français)</label>
+                    <textarea class="form-control" id="description_fr" name="description_fr" rows="4" 
+                              placeholder="Description brève de la formation en français"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="description_ar" class="form-label fw-semibold">Description (Arabe)</label>
+                    <textarea class="form-control" id="description_ar" name="description_ar" rows="4" dir="rtl"
+                              placeholder="وصف مختصر للتدريب بالعربية"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Durée et Niveau -->
+        <div class="form-section">
+            <h5><i class="fas fa-clock me-2"></i>Durée et Niveau</h5>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="level" class="form-label fw-semibold">Niveau</label>
+                    <select class="form-select" id="level" name="level">
+                        <option value="beginner">Débutant</option>
+                        <option value="intermediate">Intermédiaire</option>
+                        <option value="advanced">Avancé</option>
+                        <option value="expert">Expert</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="duration_hours" class="form-label fw-semibold">Durée (heures)</label>
+                    <input type="number" class="form-control" id="duration_hours" name="duration_hours" 
+                           placeholder="Ex: 120" min="0">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="duration_weeks" class="form-label fw-semibold">Durée (semaines)</label>
+                    <input type="number" class="form-control" id="duration_weeks" name="duration_weeks" 
+                           placeholder="Ex: 4" min="1" value="1">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Boutons -->
+        <div class="form-section">
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-times me-2"></i>Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Créer la Formation
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview">';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('title_fr').focus();
+    });
+</script>
+{% endblock %}

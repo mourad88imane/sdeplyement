@@ -1,0 +1,53 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .dashboard-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .dashboard-link:hover {
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+    }
+    .dashboard-link i {
+        margin-right: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content_title %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1>{{ title }}</h1>
+    <a href="/admin/events/categories-dashboard/" class="dashboard-link">
+        <i class="fas fa-chart-bar"></i>
+        📊 Tableau de bord des catégories
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #007bff;">
+    <h3 style="margin: 0 0 10px 0; color: #007bff;">
+        <i class="fas fa-info-circle"></i> Gestion des types d'événements
+    </h3>
+    <p style="margin: 0; color: #6c757d;">
+        Ici vous pouvez créer, modifier et supprimer les catégories d'événements. 
+        Chaque catégorie représente un type d'événement avec sa propre couleur et icône.
+        Utilisez le tableau de bord pour une vue d'ensemble des statistiques.
+    </p>
+</div>
+
+{{ block.super }}
+{% endblock %}

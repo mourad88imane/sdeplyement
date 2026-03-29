@@ -1,0 +1,21 @@
+/* Override react-day-picker blue colors with green */
+.rdp {
+  --rdp-accent-color: #0f5132 !important; /* Green color for the background of selected days */
+  --rdp-background-color: #dcfce7 !important; /* Light green background for hovered/focused elements */
+  --rdp-accent-color-dark: #166534 !important; /* Darker green for selected days in dark mode */
+  --rdp-background-color-dark: #052e16 !important; /* Very dark green for hovered/focused elements in dark mode */
+  --rdp-outline: 2px solid #0f5132 !important; /* Green outline for focused elements */
+  --rdp-outline-selected: 3px solid #0f5132 !important; /* Green outline for focused and selected elements */
+}
+
+/* Additional styles for buttons and other blue elements */
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: #dcfce7 !important;
+}
+
+.rdp-day_selected, 
+.rdp-day_selected:focus-visible, 
+.rdp-day_selected:hover {
+  background-color: #0f5132 !important;
+  color: white !important;
+}

@@ -1,0 +1,243 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Gestion des Actualités - ENT Admin{% endblock %}
+{% block page_title %}Gestion des Actualités{% endblock %}
+
+{% block content %}
+<!-- Statistiques -->
+<div class="row mb-4">
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-primary">
+                <i class="fas fa-newspaper"></i>
+            </div>
+            <div class="stat-number text-primary">{{ stats.total }}</div>
+            <div class="stat-label">Total</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-number text-success">{{ stats.published }}</div>
+            <div class="stat-label">Publiés</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-warning">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="stat-number text-warning">{{ stats.draft }}</div>
+            <div class="stat-label">Brouillons</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-info">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-number text-info">{{ stats.featured }}</div>
+            <div class="stat-label">Mis en avant</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-secondary">
+                <i class="fas fa-eye"></i>
+            </div>
+            <div class="stat-number text-secondary">{{ stats.total_views }}</div>
+            <div class="stat-label">Vues totales</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card text-center">
+            <div class="stat-icon text-primary">
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="stat-number text-primary">{{ stats.new_this_month }}</div>
+            <div class="stat-label">Nouveaux (30j)</div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtres et Actions -->
+<div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5><i class="fas fa-filter me-2"></i>Filtres et Recherche</h5>
+        <a href="/admin/news/news/add/" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouvel Article
+        </a>
+    </div>
+
+    <form method="get" class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Catégorie</label>
+            <select name="category" class="form-select">
+                <option value="">Toutes les catégories</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if current_filters.category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name_fr }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Statut</label>
+            <select name="status" class="form-select">
+                <option value="">Tous les statuts</option>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Recherche</label>
+            <input type="text" name="search" class="form-control" placeholder="Titre, extrait, auteur..." value="{{ current_filters.search }}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">&nbsp;</label>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i>Filtrer
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Liste des Actualités -->
+<div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5><i class="fas fa-list me-2"></i>Liste des Actualités</h5>
+        <span class="badge bg-primary">{{ news.paginator.count }} article{{ news.paginator.count|pluralize }}</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Catégorie</th>
+                    <th>Auteur</th>
+                    <th>Mis en avant</th>
+                    <th>Statut</th>
+                    <th>Vues</th>
+                    <th>Ajouté le</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in news %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            {% if item.featured_image %}
+                                <img src="{{ item.featured_image.url }}" alt="Image" class="rounded me-3" width="50" height="50" style="object-fit: cover;">
+                            {% else %}
+                                <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-newspaper"></i>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <strong>{{ item.title_fr }}</strong>
+                                <br>
+                                <small class="text-muted">{{ item.summary_fr|truncatechars:50 }}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge" style="background-color: {{ item.category.color }};">{{ item.category.name_fr }}</span>
+                    </td>
+                    <td>
+                        {{ item.author.get_full_name|default:item.author.username }}
+                    </td>
+                    <td>
+                        {% if item.featured %}
+                            <span class="badge bg-warning">Oui</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Non</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge bg-{% if item.status == 'published' %}success{% elif item.status == 'draft' %}warning{% elif item.status == 'archived' %}secondary{% else %}secondary{% endif %}">
+                            {{ item.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-primary">{{ item.views_count }}</span>
+                    </td>
+                    <td>
+                        <small>{{ item.created_at|date:"d/m/Y" }}</small>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'news-detail' item.slug %}" class="btn btn-outline-primary" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="/admin/news/news/{{ item.id }}/change/" class="btn btn-outline-warning" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-outline-danger" title="Supprimer" onclick="confirmDelete('{{ item.title_fr }}', {{ item.id }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Aucun article trouvé avec ces critères.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if news.has_other_pages %}
+    <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+            {% if news.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ news.previous_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in news.paginator.page_range %}
+                {% if news.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > news.number|add:'-3' and num < news.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if news.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ news.next_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmDelete(title, id) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer l'article "${title}" ?`)) {
+        window.location.href = `/admin/news/news/${id}/delete/`;
+    }
+}
+</script>
+{% endblock %}

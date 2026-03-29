@@ -1,0 +1,261 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Statistiques Avancées - ENT Admin{% endblock %}
+{% block page_title %}Statistiques Avancées{% endblock %}
+
+{% block content %}
+<!-- Filtres de Période -->
+<div class="content-card mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5><i class="fas fa-calendar me-2"></i>Période d'Analyse</h5>
+        <div class="btn-group">
+            <a href="?days=7" class="btn btn-{% if days == 7 %}primary{% else %}outline-primary{% endif %} btn-sm">7 jours</a>
+            <a href="?days=30" class="btn btn-{% if days == 30 %}primary{% else %}outline-primary{% endif %} btn-sm">30 jours</a>
+            <a href="?days=90" class="btn btn-{% if days == 90 %}primary{% else %}outline-primary{% endif %} btn-sm">90 jours</a>
+            <a href="?days=365" class="btn btn-{% if days == 365 %}primary{% else %}outline-primary{% endif %} btn-sm">1 an</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Graphique des Inscriptions Utilisateurs -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-user-plus me-2"></i>Inscriptions Utilisateurs ({{ days }} derniers jours)</h5>
+            <canvas id="userRegistrationsChart" height="300"></canvas>
+        </div>
+    </div>
+    
+    <!-- Graphique des Cours par Catégorie -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-chart-pie me-2"></i>Cours par Catégorie</h5>
+            <canvas id="coursesByCategoryChart" height="300"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Graphique des Statuts de Livres -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-book me-2"></i>Statuts des Livres</h5>
+            <canvas id="booksStatusChart" height="300"></canvas>
+        </div>
+    </div>
+    
+    <!-- Graphique des Emprunts par Mois -->
+    <div class="col-md-6 mb-4">
+        <div class="content-card">
+            <h5><i class="fas fa-chart-line me-2"></i>Emprunts par Mois</h5>
+            <canvas id="borrowsByMonthChart" height="300"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Activités des Utilisateurs -->
+<div class="content-card mb-4">
+    <h5><i class="fas fa-activity me-2"></i>Activités des Utilisateurs ({{ days }} derniers jours)</h5>
+    <div class="row">
+        {% for activity in activity_stats %}
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center">
+                <div class="stat-icon text-primary">
+                    <i class="fas fa-{% if activity.action == 'Connexion' %}sign-in-alt{% elif activity.action == 'Déconnexion' %}sign-out-alt{% elif activity.action == 'Consultation cours' %}eye{% elif activity.action == 'Inscription cours' %}graduation-cap{% elif activity.action == 'Emprunt livre' %}book{% else %}circle{% endif %}"></i>
+                </div>
+                <div class="stat-number text-primary">{{ activity.count }}</div>
+                <div class="stat-label">{{ activity.action }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Top Livres Populaires -->
+<div class="content-card">
+    <h5><i class="fas fa-trophy me-2"></i>Top 10 Livres Populaires</h5>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Titre</th>
+                    <th>Vues</th>
+                    <th>Emprunts</th>
+                    <th>Score Popularité</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in library_stats.popular_books %}
+                <tr>
+                    <td>
+                        <span class="badge bg-{% if forloop.counter <= 3 %}warning{% else %}secondary{% endif %}">
+                            #{{ forloop.counter }}
+                        </span>
+                    </td>
+                    <td>{{ book.title }}</td>
+                    <td>
+                        <span class="badge bg-info">{{ book.view_count }}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-success">{{ book.borrow_count }}</span>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-primary" style="width: {% widthratio book.view_count 1000 100 %}%">
+                                {{ book.view_count|add:book.borrow_count }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-3">
+                        <i class="fas fa-book fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Aucune donnée disponible</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Configuration des couleurs
+const colors = {
+    primary: '#667eea',
+    secondary: '#764ba2',
+    success: '#28a745',
+    warning: '#ffc107',
+    danger: '#dc3545',
+    info: '#17a2b8'
+};
+
+// Graphique des inscriptions utilisateurs
+const userRegistrationsCtx = document.getElementById('userRegistrationsChart').getContext('2d');
+const userRegistrationsChart = new Chart(userRegistrationsCtx, {
+    type: 'line',
+    data: {
+        labels: [{% for item in user_registrations %}'{{ item.date }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Nouvelles inscriptions',
+            data: [{% for item in user_registrations %}{{ item.count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            borderColor: colors.primary,
+            backgroundColor: colors.primary + '20',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        }
+    }
+});
+
+// Graphique des cours par catégorie
+const coursesByCategoryCtx = document.getElementById('coursesByCategoryChart').getContext('2d');
+const coursesByCategoryChart = new Chart(coursesByCategoryCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for item in course_by_category %}'{{ item.name }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for item in course_by_category %}{{ item.courses }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: [
+                colors.primary,
+                colors.secondary,
+                colors.success,
+                colors.warning,
+                colors.danger,
+                colors.info
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Graphique des statuts de livres
+const booksStatusCtx = document.getElementById('booksStatusChart').getContext('2d');
+const booksStatusChart = new Chart(booksStatusCtx, {
+    type: 'pie',
+    data: {
+        labels: [{% for item in library_stats.books_by_status %}'{{ item.status }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for item in library_stats.books_by_status %}{{ item.count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: [
+                colors.success,
+                colors.warning,
+                colors.danger,
+                colors.info,
+                colors.secondary
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Graphique des emprunts par mois
+const borrowsByMonthCtx = document.getElementById('borrowsByMonthChart').getContext('2d');
+const borrowsByMonthChart = new Chart(borrowsByMonthCtx, {
+    type: 'bar',
+    data: {
+        labels: [{% for item in library_stats.borrows_by_month %}'{{ item.month }}'{% if not forloop.last %},{% endif %}{% endfor %}].reverse(),
+        datasets: [{
+            label: 'Emprunts',
+            data: [{% for item in library_stats.borrows_by_month %}{{ item.count }}{% if not forloop.last %},{% endif %}{% endfor %}].reverse(),
+            backgroundColor: colors.primary + '80',
+            borderColor: colors.primary,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
