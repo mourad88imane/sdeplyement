@@ -11,6 +11,8 @@ class CourseCategoryAdmin(admin.ModelAdmin):
     fields = ['name_fr', 'name_ar', 'description_fr', 'description_ar', 'icon']
 
 
+
+
 class CourseModuleInline(admin.TabularInline):
     model = CourseModule
     extra = 1
