@@ -14,17 +14,22 @@ interface Course {
   id: number;
   title_fr: string;
   title_ar: string;
+  title_en: string; // Added English title
   description_fr: string;
   description_ar: string;
+  description_en: string; // Added English description
   label: string;
   image: string;
   category_name_fr: string;
   category_name_ar: string;
+  category_name_en: string; // Added English category name
   level_display_fr: string;
   level_display_ar: string;
+  level_display_en: string; // Added English level display
   grade: string;
   grade_display_fr: string;
   grade_display_ar: string;
+  grade_display_en: string; // Added English grade display
   views_count: number;
   instructor_count: number;
   module_count: number;
@@ -97,7 +102,7 @@ const LoadingState = memo(({ language }: { language: string }) => (
         <Loader2 className="h-8 w-8 text-[#133059]" />
       </motion.div>
       <p className="text-[#133059]/70 font-medium">
-        {language === 'ar' ? 'جاري تحميل البرامج...' : 'Chargement des programmes...'}
+        {language === 'ar' ? 'جاري تحميل البرامج...' : language === 'en' ? 'Loading courses...' : 'Chargement des programmes...'}
       </p>
     </motion.div>
   </div>
@@ -111,12 +116,14 @@ const EmptyState = memo(({ language }: { language: string }) => (
       <BookOpen className="h-10 w-10 text-[#133059]/40" />
     </div>
     <h3 className="text-2xl font-bold text-[#133059] mb-3">
-      {language === 'ar' ? 'لم يتم العثور على برامج' : 'Aucun programme trouvé'}
+      {language === 'ar' ? 'لم يتم العثور على برامج' : language === 'en' ? 'No courses found' : 'Aucun programme trouvé'}
     </h3>
     <p className="text-[#133059]/60 max-w-md mx-auto">
       {language === 'ar'
         ? 'حاول استكشاف فئات مختلفة'
-        : "Essayez d'explorer d'autres catégories"}
+        : language === 'en'
+          ? 'Try exploring different categories'
+          : "Essayez d'explorer d'autres catégories"}
     </p>
   </motion.div>
 ));
@@ -132,6 +139,7 @@ interface CourseCardProps {
 
 const CourseCard = memo(({ course, language, getImgSrc, getLocalizedContent }: CourseCardProps) => {
   const isAr = language === 'ar';
+  const isEn = language === 'en';
   const title        = getLocalizedContent(course, 'title');
   const description  = getLocalizedContent(course, 'description');
   const catName      = getLocalizedContent(course, 'category_name');
@@ -162,7 +170,7 @@ const CourseCard = memo(({ course, language, getImgSrc, getLocalizedContent }: C
             )}
             {course.featured && (
               <span className="inline-flex px-2.5 py-1 rounded-full text-[10px] font-black bg-[#133059] text-white shadow-md">
-                ⭐ {isAr ? 'مميز' : 'Vedette'}
+                ⭐ {isAr ? 'مميز' : isEn ? 'Featured' : 'Vedette'}
               </span>
             )}
           </div>
@@ -183,13 +191,13 @@ const CourseCard = memo(({ course, language, getImgSrc, getLocalizedContent }: C
           <div className="space-y-1.5 mb-3 pb-3 border-b border-slate-100">
             {catName && (
               <div className="text-xs text-slate-600">
-                <span className="font-semibold text-slate-700">{isAr ? 'الفئة:' : 'Catégorie:'}</span>{' '}
+                <span className="font-semibold text-slate-700">{isAr ? 'الفئة:' : isEn ? 'Category:' : 'Catégorie:'}</span>{' '}
                 {catName}
               </div>
             )}
             {levelDisplay && (
               <div className="text-xs text-slate-600">
-                <span className="font-semibold text-slate-700">{isAr ? 'المستوى:' : 'Niveau:'}</span>{' '}
+                <span className="font-semibold text-slate-700">{isAr ? 'المستوى:' : isEn ? 'Level:' : 'Niveau:'}</span>{' '}
                 {levelDisplay}
               </div>
             )}
@@ -211,13 +219,13 @@ const CourseCard = memo(({ course, language, getImgSrc, getLocalizedContent }: C
               {course.instructor_count > 0 && (
                 <div className="flex items-center gap-1 text-slate-500">
                   <Users className="h-3.5 w-3.5" />
-                  <span>{course.instructor_count} {isAr ? 'مدرب' : 'Form.'}</span>
+                  <span>{course.instructor_count} {isAr ? 'مدرب' : isEn ? 'Instructors' : 'Form.'}</span>
                 </div>
               )}
               {course.module_count > 0 && (
                 <div className="flex items-center gap-1 text-slate-500">
                   <BookOpen className="h-3.5 w-3.5" />
-                  <span>{course.module_count} mod.</span>
+                  <span>{course.module_count} {isAr ? 'وحدة' : isEn ? 'modules' : 'mod.'}</span>
                 </div>
               )}
               {course.views_count > 0 && (
@@ -229,26 +237,18 @@ const CourseCard = memo(({ course, language, getImgSrc, getLocalizedContent }: C
             </div>
             {course.enrollment_count > 0 && (
               <span className="text-slate-600 font-semibold">
-                {course.enrollment_count.toLocaleString()} {isAr ? 'مسجل' : 'inscrits'}
+                {course.enrollment_count.toLocaleString()} {isAr ? 'مسجل' : isEn ? 'enrolled' : 'inscrits'}
               </span>
             )}
           </div>
 
           {/* CTA — mirrors Bibliothèque primary button exactly */}
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Link
-              to={`/formation/${course.id}`}
-              className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-[#133059] hover:bg-[#0a2342] text-white font-semibold text-xs transition-all duration-300 shadow-sm hover:shadow-md"
-            >
-              <BookOpen className="h-3.5 w-3.5" />
-              {isAr ? 'استكشف البرنامج' : 'Découvrir le programme'}
-            </Link>
-          </motion.div>
-
+          {/* Removed "Découvrir le programme" button for all languages */}
+          
           {/* Start date — mirrors Bibliothèque publication date footer */}
           {course.start_date && (
             <div className="text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100 text-center">
-              {isAr ? 'تبدأ: ' : 'Début: '}
+              {isAr ? 'تبدأ: ' : isEn ? 'Starts: ' : 'Début: '}
               {new Date(course.start_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' })}
             </div>
           )}
@@ -261,18 +261,19 @@ CourseCard.displayName = 'CourseCard';
 
 // ─── Categories ───────────────────────────────────────────────────────────────
 const CATEGORIES = [
-  { id: 'all',     name_fr: 'Tous',              name_ar: 'الكل'            },
-  { id: 'telecom', name_fr: 'Télécommunications', name_ar: 'اتصالات'         },
-  { id: 'securit', name_fr: 'Sécurité',           name_ar: 'الأمن'           },
-  { id: 'data',    name_fr: 'Data Science',        name_ar: 'علوم البيانات'  },
-  { id: 'reseaux', name_fr: 'Réseaux',             name_ar: 'الشبكات'        },
-  { id: 'cloud',   name_fr: 'Cloud',               name_ar: 'السحاب'         },
+  { id: 'all',     name_fr: 'Tous',              name_ar: 'الكل',            name_en: 'All' },
+  { id: 'telecom', name_fr: 'Télécommunications', name_ar: 'اتصالات',         name_en: 'Telecommunications' },
+  { id: 'securit', name_fr: 'Sécurité',           name_ar: 'الأمن',           name_en: 'Security' },
+  { id: 'data',    name_fr: 'Data Science',        name_ar: 'علوم البيانات',  name_en: 'Data Science' },
+  { id: 'reseaux', name_fr: 'Réseaux',             name_ar: 'الشبكات',        name_en: 'Networks' },
+  { id: 'cloud',   name_fr: 'Cloud',               name_ar: 'السحاب',         name_en: 'Cloud' },
 ];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const BestCourses: React.FC = () => {
   const { language } = useLanguage();
   const isAr = language === 'ar';
+  const isEn = language === 'en';
 
   const [activeCategory, setActiveCategory] = useState('all');
   const [courses, setCourses] = useState<Course[]>([]);
@@ -296,7 +297,7 @@ const BestCourses: React.FC = () => {
 
   // ── Helpers (unchanged) ──
   const getLocalizedContent = useCallback((item: any, field: string) => {
-    const langKey = language === 'ar' ? 'ar' : 'fr';
+    const langKey = language === 'ar' ? 'ar' : language === 'en' ? 'en' : 'fr';
     return item[`${field}_${langKey}`] || item[`${field}_fr`] || '';
   }, [language]);
 
@@ -339,13 +340,13 @@ const BestCourses: React.FC = () => {
             >
               <Sparkles className="w-4 h-4 text-[#e8c97a] animate-pulse" />
               <span className="text-[#133059] text-xs font-bold uppercase tracking-widest">
-                {isAr ? '🎓 برامجنا المتميزة' : '🎓 Nos Programmes Phares'}
+                {isAr ? '🎓 برامجنا المتميزة' : isEn ? '🎓 Our Featured Programs' : '🎓 Nos Programmes Phares'}
               </span>
             </motion.div>
 
             {/* H1 — same weight/size/color as Bibliothèque */}
             <h1 className="text-5xl sm:text-6xl font-bold text-[#133059] leading-tight mb-6">
-              {isAr ? 'استكشف عالم التدريب' : 'Explorez Nos Formations'}
+              {isAr ? 'استكشف عالم التدريب' : isEn ? 'Explore the World of Training' : 'Explorez Nos Formations'}
             </h1>
 
             {/* Gold accent line — identical to Bibliothèque */}
@@ -355,7 +356,9 @@ const BestCourses: React.FC = () => {
             <p className="text-[#133059]/70 text-lg max-w-2xl mx-auto leading-relaxed">
               {isAr
                 ? 'اكتسب المهارات المطلوبة من أفضل الخبراء والمدربين في مجالك'
-                : "Des programmes conçus par les meilleurs experts du secteur pour accélérer votre carrière"}
+                : isEn
+                  ? 'Acquire in-demand skills from top industry experts and trainers'
+                  : "Des programmes conçus par les meilleurs experts du secteur pour accélérer votre carrière"}
             </p>
           </motion.div>
 
@@ -367,9 +370,9 @@ const BestCourses: React.FC = () => {
             className={`flex flex-wrap gap-3 mb-10 ${isAr ? 'justify-end' : ''}`}
           >
             {[
-              { icon: <Zap className="w-3.5 h-3.5" />,        text: isAr ? 'محتوى تفاعلي'     : 'Contenu Interactif'        },
-              { icon: <Award className="w-3.5 h-3.5" />,      text: isAr ? 'شهادات معترف بها' : 'Certifications Reconnues'  },
-              { icon: <TrendingUp className="w-3.5 h-3.5" />, text: isAr ? 'تطور مهني مضمون'  : 'Évolution Carrière'        },
+              { icon: <Zap className="w-3.5 h-3.5" />,        text: isAr ? 'محتوى تفاعلي'     : isEn ? 'Interactive Content' : 'Contenu Interactif'        },
+              { icon: <Award className="w-3.5 h-3.5" />,      text: isAr ? 'شهادات معترف بها' : isEn ? 'Recognized Certifications' : 'Certifications Reconnues'  },
+              { icon: <TrendingUp className="w-3.5 h-3.5" />, text: isAr ? 'تطور مهني مضمون'  : isEn ? 'Guaranteed Career Progression' : 'Évolution Carrière'        },
             ].map((pill, i) => (
               <motion.div
                 key={i}
@@ -407,7 +410,7 @@ const BestCourses: React.FC = () => {
                         : 'bg-white border-[#133059]/20 text-[#133059] hover:border-[#e8c97a] hover:bg-[#e8c97a]/5'
                     }`}
                   >
-                    {isAr ? cat.name_ar : cat.name_fr}
+                    {isAr ? cat.name_ar : isEn ? cat.name_en : cat.name_fr}
                   </button>
                 </motion.div>
               ))}
@@ -457,16 +460,18 @@ const BestCourses: React.FC = () => {
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#e8c97a]/30 bg-[#e8c97a]/10 mb-4">
                     <Sparkles className="w-3.5 h-3.5 text-[#e8c97a]" />
                     <span className="text-[#e8c97a] text-xs font-bold uppercase tracking-widest">
-                      {isAr ? 'ابدأ اليوم' : "Commencez aujourd'hui"}
+                      {isAr ? 'ابدأ اليوم' : isEn ? 'Start Today' : "Commencez aujourd'hui"}
                     </span>
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-3">
-                    {isAr ? 'هل أنت مستعد للارتقاء بمهاراتك؟' : 'Prêt à transformer votre carrière?'}
+                    {isAr ? 'هل أنت مستعد للارتقاء بمهاراتك؟' : isEn ? 'Ready to Upgrade Your Skills?' : 'Prêt à transformer votre carrière?'}
                   </h3>
                   <p className="text-white/60 text-sm leading-relaxed">
                     {isAr
                       ? 'انضم إلى آلاف المتدربين الذين غيروا حياتهم المهنية مع برامجنا'
-                      : "Rejoignez des milliers d'apprenants qui ont accéléré leur progression."}
+                      : isEn
+                        ? 'Join thousands of learners who have transformed their careers with our programs'
+                        : "Rejoignez des milliers d'apprenants qui ont accéléré leur progression."}
                   </p>
                 </div>
 
@@ -477,7 +482,7 @@ const BestCourses: React.FC = () => {
                       to="/formation"
                       className="flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-[#e8c97a] hover:bg-[#f0d48a] text-[#133059] font-bold text-sm transition-all duration-300 shadow-lg"
                     >
-                      {isAr ? 'استكشف جميع البرامج' : 'Explorer tous les cours'}
+                      {isAr ? 'استكشف جميع البرامج' : isEn ? 'Explore All Programs' : 'Explorer tous les cours'}
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </motion.div>
@@ -488,7 +493,7 @@ const BestCourses: React.FC = () => {
                       to="/about"
                       className="flex items-center justify-center gap-2 px-8 py-3 rounded-lg border border-white/20 text-white/70 hover:border-white/40 hover:text-white font-semibold text-sm transition-all duration-300 bg-white/5 hover:bg-white/10"
                     >
-                      {isAr ? 'اعرف المزيد' : 'En savoir plus'}
+                      {isAr ? 'اعرف المزيد' : isEn ? 'Learn More' : 'En savoir plus'}
                     </Link>
                   </motion.div>
                 </div>
