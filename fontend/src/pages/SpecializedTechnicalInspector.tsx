@@ -26,7 +26,7 @@ const DETAILS = {
   practice:  { fr: '3 mois pratique', ar: '3 أشهر تطبيقي', en: '3 months practical' },
   location:  { fr: 'Directions des Transmission de Wilaya', ar: 'مديريات المواصلات  السلكية و اللاسلكيةالولائية', en: 'Transmission Directorates of Wilayas' },
   diploma:   { fr: "Diplôme d'Inspecteur Technique Spécialisé", ar: 'شهادة مفتش تقني متخصص', en: 'Specialized Technical Inspector Diploma' },
-  admission: { fr: 'Baccalauréat scientifique ou technique', ar: 'بكالوريا علمية أو تقنية', en: 'Scientific or technical baccalaureate' },
+  admission: { fr: 'Baccalauréat +5', ar: 'بكالوريا + 5', en: 'baccalaureate + 5' },
   language:  { fr: 'Français ,Anglais et Arabe ', ar: 'الفرنسية والعربية و الانجليزية', en: 'French ,English and Arabic' },
   capacity:  { fr: '30 étudiants', ar: '30 طالب', en: '30 students' },
 };
@@ -237,7 +237,7 @@ export default function SpecializedTechnicalInspector() {
                 style={{ color: 'rgba(255,255,255,0.42)', fontFamily: 'system-ui, sans-serif' }}
               >
                 {t(
-                  "Formation d'excellence combinant connaissances théoriques avancées et pratique intensive pour préparer les experts des réseaux et systèmes de transmission.",
+                  "Formation d'excellence combinant connaissances théoriques avancées et pratique intensive pour préparer les experts des réseaux et systèmes des transmissions.",
                   'برنامج تكويني متميز يجمع بين المعرفة النظرية المتقدمة والتدريب العملي المكثف لإعداد خبراء في شبكات وأنظمة المواصلات السلكية و اللاسلكية.',
                   'An excellence program combining advanced theoretical knowledge and intensive practical training to prepare experts in transmissionss networks and systems.',
                 )}
