@@ -91,10 +91,10 @@ WSGI_APPLICATION = 'school_backend.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': env.db(),  # This will use DATABASE_URL from your .env
+    'default': env.db(),
 }
 
-#pasword validation
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
