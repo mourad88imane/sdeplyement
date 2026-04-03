@@ -28,14 +28,12 @@ const DETAILS = {
   diploma:   { fr: "Diplôme d'Inspecteur Technique Spécialisé", ar: 'شهادة مفتش تقني متخصص', en: 'Specialized Technical Inspector Diploma' },
   admission: { fr: 'Baccalauréat +5', ar: 'بكالوريا + 5', en: 'baccalaureate + 5' },
   language:  { fr: 'Français ,Anglais et Arabe ', ar: 'الفرنسية والعربية و الانجليزية', en: 'French ,English and Arabic' },
-  capacity:  { fr: '30 étudiants', ar: '30 طالب', en: '30 students' },
 };
 
 const OVERVIEW_CARDS = [
   { Icon: Clock,       key: 'duration',  fr:'Durée',         ar:'المدة',        en:'Duration',  sub: (l:Lang) => L('9 mois théorie · 3 mois pratique','9 أشهر نظري · 3 أشهر تطبيقي','9 months theory · 3 months practical',l) },
   { Icon: Award,       key: 'diploma',   fr:'Diplôme',        ar:'الشهادة',      en:'Diploma',   sub: null },
   { Icon: CheckCircle, key: 'admission', fr:'Admission',      ar:'القبول',       en:'Admission', sub: null },
-  { Icon: Users,       key: 'capacity',  fr:'Capacité',       ar:'العدد',        en:'Capacity',  sub: null },
   { Icon: Building,    key: 'location',  fr:'Stage Pratique', ar:'مكان التطبيق', en:'Practicum', sub: null },
   { Icon: Wifi,        key: 'language',  fr:'Langues',        ar:'اللغات',       en:'Languages', sub: null },
 ] as const;
@@ -257,7 +255,7 @@ export default function SpecializedTechnicalInspector() {
                     fontFamily: 'system-ui, sans-serif',
                   }}
                 >
-                  {t('Postuler maintenant', 'التسجيل الآن', 'Apply Now')}
+                  {t('Contactez nous  ', 'اتصل بنا  ', 'Contact us  ')}
                   <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <Link to="/formation"
@@ -281,8 +279,8 @@ export default function SpecializedTechnicalInspector() {
             >
               {[
                 { v: '12', u: t('mois','شهر','months'), l: t('Durée totale','المدة','Total Duration') },
-                { v: 'Bac', u: '+3', l: t('Niveau requis','المستوى','Level') },
-                { v: '30', u: t('places','مقعد','seats'), l: t('Capacité','العدد','Capacity') },
+                { v: 'Bac', u: '+5', l: t('Niveau requis','المستوى','Level') },
+                
                 { v: '9+3', u: t('mois','أشهر','months'), l: t('Théorie·Pratique','نظري·تطبيقي','Theory·Practice') },
               ].map((s, i) => (
                 <motion.div key={i}
@@ -770,7 +768,7 @@ export default function SpecializedTechnicalInspector() {
                   <AlertCircle style={{ width: 15, height: 15, color: 'rgba(12,27,48,0.45)', flexShrink: 0, marginTop: 2 }} />
                   <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(12,27,48,0.55)', fontFamily: 'system-ui, sans-serif' }}>
                     {t(
-                      "Cette shéhada permet la participation à la concours sur dossier ou sur la base des examens pour l'accès au grade de Mufatich Taqni Mutakhassis.",
+                      "Cette diplome permet la participation à la concours sur dossier ou sur la base des examens pour l'accès au grade de Instecteur Technique specialisée.",
                       'هذه الشهادة تسمح لحاملها بالمشاركة في المسابقة على أساس الاختبارات أو على أساس الشهادة للالتحاق برتبة مفتش تقني متخصص.',
                       'This diploma allows holders to participate in the competition through examination or diploma-based selection for the Specialized Technical Inspector grade.',
                     )}
@@ -805,7 +803,7 @@ export default function SpecializedTechnicalInspector() {
                     { Icon: Users,    l: t('Âge','السن','Age'),             v: t('Non limité','غير محدد','Not limited') },
                     { Icon: Globe,    l: t('Nationalité','الجنسية','Nat.'), v: t('Algérienne','جزائرية','Algerian') },
                     { Icon: Award,    l: t('Mode','الطريقة','Mode'),         v: t('Concours','مسابقة','Competition') },
-                    { Icon: Building, l: t('Organisateur','المنظم','Org.'), v: t('DGTN','المديرية العامة','DGTN') },
+                    { Icon: Building, l: t('Organisateur','المنظم','Org.'), v: t('DGTN','المديرية العامة للمواصلات السلكية واللاسلكية','DGTN') },
                   ].map(({ Icon: CIcon, l, v }, i) => (
                     <div key={i} className="flex flex-col gap-1.5 p-4 rounded-xl bg-slate-50/80 border border-slate-100">
                       <div className="flex items-center gap-1.5">
@@ -902,13 +900,7 @@ export default function SpecializedTechnicalInspector() {
 
             <div className="relative z-10 p-10 md:p-14 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
               <div className="max-w-[520px]">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#e8c97a]/28 bg-[#e8c97a]/[0.09] mb-5">
-                  <Sparkles style={{ width: 12, height: 12, color: '#e8c97a' }} />
-                  <span className="text-[#e8c97a] text-[10px] font-black uppercase tracking-[0.2em]"
-                    style={{ fontFamily: 'system-ui, sans-serif' }}>
-                    {t('Candidatures ouvertes','التسجيل مفتوح','Applications open')}
-                  </span>
-                </div>
+                
                 <h3 className="font-black text-white leading-[1.1] tracking-[-0.025em] mb-4"
                   style={{ fontSize: 'clamp(28px,3.5vw,40px)', fontFamily: "Georgia, serif" }}>
                   {t("Intéressé par ce programme ?","هل أنت مهتم بهذا البرنامج؟","Interested in this program?")}
