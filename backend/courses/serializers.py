@@ -69,7 +69,15 @@ class CourseListSerializer(serializers.ModelSerializer):
         grade_map = {
             'inspecteur_technique_specialise': 'المفتش التقني المتخصص',
             'assistant_technique_specialise': 'المساعد التقني المتخصص',
-            'agent_exploitation': 'وكيل الاستغلال',
+            'agent_exploitation': 'عون الاستغلال',
+        }
+        return grade_map.get(obj.grade, obj.grade)
+
+    def get_grade_display_en(self, obj):
+        grade_map = {
+            'inspecteur_technique_specialise': 'Specialized Technical Inspector',
+            'assistant_technique_specialise': 'Specialized Technical Assistant',
+            'agent_exploitation': 'Exploitation Agent',
         }
         return grade_map.get(obj.grade, obj.grade)
 

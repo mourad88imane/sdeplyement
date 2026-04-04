@@ -457,12 +457,7 @@ const BestCourses: React.FC = () => {
               <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
                 <div className="max-w-xl">
                   {/* Eyebrow badge — inverted colors, same structure */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#e8c97a]/30 bg-[#e8c97a]/10 mb-4">
-                    <Sparkles className="w-3.5 h-3.5 text-[#e8c97a]" />
-                    <span className="text-[#e8c97a] text-xs font-bold uppercase tracking-widest">
-                      {isAr ? 'ابدأ اليوم' : isEn ? 'Start Today' : "Commencez aujourd'hui"}
-                    </span>
-                  </div>
+                  
                   <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-3">
                     {isAr ? 'هل أنت مستعد للارتقاء بمهاراتك؟' : isEn ? 'Ready to Upgrade Your Skills?' : 'Prêt à transformer votre carrière?'}
                   </h3>

@@ -63,7 +63,7 @@ class CourseAdmin(admin.ModelAdmin):
             'fields': ('description_fr', 'description_ar', 'description_en', 'content_fr', 'content_ar', 'content_en')
         }),
         ('Métadonnées du cours', {
-            'fields': ('level', 'duration_weeks', 'duration_hours', 'max_students')
+            'fields': ('level', 'duration_weeks', 'duration_hours', 'max_students', 'grade')
         }),
         ('Médias', {
             'fields': ('image', 'video_url')
