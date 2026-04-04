@@ -27,7 +27,9 @@ class MuseumEquipmentListSerializer(serializers.ModelSerializer):
             'condition', 'condition_display_fr', 'condition_display_ar',
             'status', 'status_display_fr', 'status_display_ar',
             'image', 'image_alt_fr', 'image_alt_ar',
-            'origin', 'period', 'featured', 'author_name', 'created_at'
+            'origin', 'period', 'featured', 'author_name', 'created_at',
+            'description_fr', 'description_ar', 'historical_context_fr', 'historical_context_ar',
+            'dimensions', 'weight'
         ]
 
 
