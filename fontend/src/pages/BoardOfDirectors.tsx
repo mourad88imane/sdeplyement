@@ -79,8 +79,8 @@ const BoardOfDirectors = () => {
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
       image: "/images/micl.webp",
-      bio: "Représente le Ministère de l'Intérieur, des Collectivités Locales et de l'Aménagement du Territoire, assurant l'alignement des programmes avec les besoins nationaux.",
-      bioAr: "يمثل وزارة الداخلية والجماعات المحلية والتهيئة العمرانية، ويضمن مواءمة البرامج مع الاحتياجات الوطنية."
+      bio: "Représente le Ministère de l'Intérieur, des Collectivités Locales et des transports, assurant l'alignement des programmes avec les besoins nationaux.",
+      bioAr: "يمثل وزارة الداخلية والجماعات المحلية والنقل ، ويضمن مواءمة البرامج مع الاحتياجات الوطنية."
     },
     {
       id: 5,
@@ -88,7 +88,7 @@ const BoardOfDirectors = () => {
       nameAr: "ممثل وزارة المالية",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5793953/pexels-photo-5793953.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/finance.png",
       bio: "Supervise les aspects financiers et budgétaires de l'école, assurant une gestion financière saine et conforme aux réglementations.",
       bioAr: "يشرف على الجوانب المالية والميزانية للمدرسة، مما يضمن إدارة مالية سليمة ومتوافقة مع اللوائح."
     },
@@ -98,7 +98,7 @@ const BoardOfDirectors = () => {
       nameAr: "ممثل المديرية العامة للوظيفة العمومية والإصلاح الإداري",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5989925/pexels-photo-5989925.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/emploi.webp",
       bio: "Représente la Direction Générale de la Fonction Publique et de la Réforme Administrative, veillant à l'alignement des formations avec les besoins du secteur public.",
       bioAr: "يمثل المديرية العامة للوظيفة العمومية والإصلاح الإداري، ويضمن مواءمة التكوين مع احتياجات القطاع العام."
     },
@@ -108,7 +108,7 @@ const BoardOfDirectors = () => {
       nameAr: "ممثل وزارة البريد والمواصلات السلكية واللاسلكية",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5989933/pexels-photo-5989933.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/poste.jfif",
       bio: "Assure la liaison entre l'école et le Ministère des Postes et Télécommunications, facilitant l'adaptation des programmes aux évolutions du secteur.",
       bioAr: "يضمن الربط بين المدرسة ووزارة البريد والمواصلات السلكية واللاسلكية، مما يسهل تكييف البرامج مع تطورات القطاع."
     },
@@ -399,11 +399,11 @@ const BoardOfDirectors = () => {
                 className="bg-white/70 backdrop-blur-md rounded-2xl overflow-hidden shadow-md hover:shadow-[0_20px_50px_rgba(19,48,89,0.12)] transition-all border border-blue/10 hover:border-gold/30 group"
               >
                 {/* Image */}
-                <div className="aspect-[4/3] relative overflow-hidden bg-slate-200">
+                <div className="aspect-[2/2] relative overflow-hidden bg-slate-200 p-6">
                   <img
                     src={member.image}
                     alt={language === 'ar' ? member.nameAr : member.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-2000 ease-out"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-2000 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-blue/40 via-transparent to-transparent" />
                 </div>
