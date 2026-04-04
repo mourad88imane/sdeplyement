@@ -44,12 +44,12 @@ const BoardOfDirectors = () => {
   const boardMembers: BoardMember[] = [
     {
       id: 1,
-      name: "Directeur Général des Télécommunications",
+      name: "Directeur Général des Transmissions",
       nameAr: "المدير العام للمواصلات السلكية واللاسلكية",
       title: "Président du Conseil d'Administration",
       titleAr: "رئيسا",
-      image: "https://images.pexels.com/photos/5792641/pexels-photo-5792641.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      bio: "En tant que Directeur Général des Télécommunications, il préside le conseil d'administration et supervise les orientations stratégiques de l'école.",
+      image: "/images/algerie.webp",
+      bio: "En tant que Directeur Général des Transmissions, il préside le conseil d'administration et supervise les orientations stratégiques de l'école.",
       bioAr: "بصفته المدير العام للمواصلات السلكية واللاسلكية، يرأس مجلس الإدارة ويشرف على التوجهات الاستراتيجية للمدرسة."
     },
     {
@@ -58,7 +58,7 @@ const BoardOfDirectors = () => {
       nameAr: "ممثل وزير الدفاع الوطني",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5792628/pexels-photo-5792628.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/defence.webp",
       bio: "Représente le Ministère de la Défense Nationale au sein du conseil et assure la liaison entre l'école et les besoins stratégiques du secteur de la défense.",
       bioAr: "يمثل وزارة الدفاع الوطني في المجلس ويضمن الربط بين المدرسة والاحتياجات الاستراتيجية لقطاع الدفاع."
     },
@@ -68,17 +68,17 @@ const BoardOfDirectors = () => {
       nameAr: "ممثل وزير الشؤون الخارجية",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5792622/pexels-photo-5792622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/etrangere.webp",
       bio: "Apporte la perspective internationale et diplomatique aux décisions du conseil, facilitant les collaborations internationales de l'école.",
       bioAr: "يقدم المنظور الدولي والدبلوماسي لقرارات المجلس، مما يسهل التعاون الدولي للمدرسة."
     },
     {
       id: 4,
       name: "Représentant du Ministère de l'Intérieur",
-      nameAr: "ممثل وزارة الداخلية والجماعات المحلية والتهيئة العمرانية",
+      nameAr: "ممثل وزارة الداخلية والجماعات المحلية والنقل",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5615665/pexels-photo-5615665.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/micl.webp",
       bio: "Représente le Ministère de l'Intérieur, des Collectivités Locales et de l'Aménagement du Territoire, assurant l'alignement des programmes avec les besoins nationaux.",
       bioAr: "يمثل وزارة الداخلية والجماعات المحلية والتهيئة العمرانية، ويضمن مواءمة البرامج مع الاحتياجات الوطنية."
     },
@@ -114,11 +114,11 @@ const BoardOfDirectors = () => {
     },
     {
       id: 8,
-      name: "Directeur de l'École Nationale des Télécommunications",
+      name: "Directeur de l'École Nationale des Transmissions",
       nameAr: "مدير المدرسة الوطنية للمواصلات السلكية واللاسلكية",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5989942/pexels-photo-5989942.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/logo.jpg",
       bio: "Responsable de la gestion quotidienne de l'école, il présente au conseil les rapports sur lesquels sont basées les délibérations concernant le budget et l'organisation des études.",
       bioAr: "مسؤول عن الإدارة اليومية للمدرسة، يقدم للمجلس التقارير التي تستند إليها المداولات بشأن الميزانية وتنظيم الدراسة."
     },
@@ -128,17 +128,17 @@ const BoardOfDirectors = () => {
       nameAr: "الأمين العام للمدرسة الوطنية للمواصلات السلكية واللاسلكية",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5989938/pexels-photo-5989938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/logo.jpg",
       bio: "Supervise les aspects administratifs de l'école et assure le suivi des décisions du conseil d'administration.",
       bioAr: "يشرف على الجوانب الإدارية للمدرسة ويضمن متابعة قرارات مجلس الإدارة."
     },
     {
       id: 10,
       name: "Directeur des Études et des Stages",
-      nameAr: "مدير الدراسات والتداريب",
+      nameAr: "مدير الدراسات والتربصات",
       title: "Membre du Conseil",
       titleAr: "عضو مجلس الإدارة",
-      image: "https://images.pexels.com/photos/5989926/pexels-photo-5989926.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/logo.jpg",
       bio: "Responsable de l'organisation pédagogique et des programmes de stages, il veille à la qualité de la formation dispensée aux étudiants.",
       bioAr: "مسؤول عن التنظيم التربوي وبرامج التدريب، يضمن جودة التكوين المقدم للطلاب."
     },
@@ -148,7 +148,7 @@ const BoardOfDirectors = () => {
       nameAr: "ممثلين عن المدرسين",
       title: "Membres du Conseil",
       titleAr: "أعضاء مجلس الإدارة",
-      image: "https://images.pexels.com/photos/8197527/pexels-photo-8197527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/logo.jpg",
       bio: "Représentent le corps professoral au sein du conseil, apportant leur expertise pédagogique et leur connaissance des réalités du terrain.",
       bioAr: "يمثلون هيئة التدريس في المجلس، ويقدمون خبرتهم التربوية ومعرفتهم بواقع الميدان."
     },
@@ -158,7 +158,7 @@ const BoardOfDirectors = () => {
       nameAr: "ممثلين عن الطلبة",
       title: "Membres du Conseil",
       titleAr: "أعضاء مجلس الإدارة",
-      image: "https://images.pexels.com/photos/8197479/pexels-photo-8197479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image: "/images/logo.jpg",
       bio: "Portent la voix des étudiants au sein du conseil, assurant que leurs préoccupations et suggestions sont prises en compte dans les décisions.",
       bioAr: "يحملون صوت الطلاب في المجلس، ويضمنون أخذ اهتماماتهم واقتراحاتهم في الاعتبار عند اتخاذ القرارات."
     }
