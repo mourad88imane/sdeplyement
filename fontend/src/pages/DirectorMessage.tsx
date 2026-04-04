@@ -261,7 +261,7 @@ const DirectorMessageProfessional = () => {
                     {currentDirector ? getDirectorName(currentDirector) : (t('directorName') || 'Director Name')}
                   </p>
                   <p className="text-sm text-slate-500 font-semibold uppercase tracking-widest">
-                    {t('directorTitle') || 'Director General'}
+                    {t('directorTitle') || 'Director '}
                   </p>
                 </div>
               </div>

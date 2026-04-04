@@ -12,7 +12,7 @@ export const en = {
   signUp: "Sign Up",
   profile: "Profile",
   logout: "Logout",
-
+ directorTitle: "School Director",
   // MegaMenu - About Section
   aboutTitle: "About Us",
   achievements: "Achievements",
