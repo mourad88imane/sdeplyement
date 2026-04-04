@@ -34,6 +34,7 @@ class CourseAdmin(admin.ModelAdmin):
         'course_type',
         'category', 
         'level', 
+        'grade',
         'duration_weeks', 
         'status', 
         'featured',
