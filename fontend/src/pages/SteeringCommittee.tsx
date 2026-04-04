@@ -76,11 +76,11 @@ const SteeringCommittee = () => {
     },
     {
       id: 6,
-      nameFr: "Directeur de l'École Nationale des Télécommunications",
+      nameFr: "Directeur de l'École Nationale des Transmissions",
       nameAr: "مدير المدرسة الوطنية للمواصلات السلكية واللاسلكية",
       titleFr: "Membre du Comité",
       titleAr: "عضو اللجنة",
-      departmentFr: "École Nationale des Télécommunications",
+      departmentFr: "École Nationale des Transmissions",
       departmentAr: "المدرسة الوطنية للمواصلات السلكية واللاسلكية"
     },
     {
@@ -378,7 +378,7 @@ const SteeringCommittee = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/board"
+                to="/about/board"
                 className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-blue text-white font-bold text-sm hover:bg-blue-dark transition-all duration-300 shadow-lg hover:shadow-blue/30 hover:scale-105 active:scale-95"
               >
                 {language === 'ar' ? 'مجلس الإدارة' : language === 'en' ? 'Board of Directors' : 'Conseil d\'Administration'}
