@@ -1,7 +1,7 @@
 
 
 import HeroSection from '@/components/home/HeroSection';
-import BestCourses from '@/components/home/BestCourses';
+
 
 import ENTsection from '@/components/home/ENTsection';
 import DirectorSection from '@/components/home/DirectorSection';
@@ -27,7 +27,7 @@ const Home = () => {
            <EventsNews />
         </div>
       {/* Sections grouped for a logical user journey */}
-         <BestCourses /><FaqSection />
+         <FaqSection />
 
         <ReviewsSection />
 
