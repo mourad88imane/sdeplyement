@@ -29,6 +29,7 @@ class CourseListSerializer(serializers.ModelSerializer):
     level_display_ar = serializers.CharField(source='get_level_display_ar', read_only=True)
     grade_display_fr = serializers.SerializerMethodField()
     grade_display_ar = serializers.SerializerMethodField()
+    grade_display_en = serializers.SerializerMethodField()
     instructor_count = serializers.SerializerMethodField()
     module_count = serializers.SerializerMethodField()
     enrollment_count = serializers.SerializerMethodField()
@@ -40,7 +41,7 @@ class CourseListSerializer(serializers.ModelSerializer):
             'description_fr', 'description_ar', 'description_en',
             'category_name_fr', 'category_name_ar', 'category_icon',
             'level', 'level_display_fr', 'level_display_ar',
-            'grade', 'grade_display_fr', 'grade_display_ar',
+            'grade', 'grade_display_fr', 'grade_display_ar', 'grade_display_en',
             'image', 'pdf_file', 'registration_open',
             'start_date', 'end_date', 'featured', 'views_count',
             'instructor_count', 'module_count', 'enrollment_count',
